@@ -1,0 +1,41 @@
+train_config:
+  num_generations: 200
+  es_name: "Open_ES"
+  es_config:
+    popsize: 100
+    opt_name: "sgd"
+  es_params:
+    lrate_init: 0.01
+    lrate_decay: 0.999
+    lrate_limit: 0.001
+    sigma_init: 0.03
+    sigma_decay: 0.999
+
+  problem_name: "Gym"
+  problem_config:
+    env_name: "CartPole-v1"
+    num_env_steps: 200
+    num_rollouts: 20
+  
+  fitness_config:
+    maximize: true
+    centered_rank: true
+    z_score: true
+    w_decay: 0.1
+
+  network_name: "MLP"
+  network_config: 
+    num_hidden_units: 64
+    num_hidden_layers: 2
+    num_output_units: 2
+    hidden_activation: "relu"
+    output_activation: "categorical"
+
+log_config:
+  time_to_track: ["num_gens", "num_total_steps"]
+  what_to_track: ["perf_best", "perf_best_top",
+                  "perf_gen_mean", "perf_gen_best"]
+  verbose: true
+  print_every_k_updates: 40
+  overwrite: 1
+  model_type: "jax"

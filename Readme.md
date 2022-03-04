@@ -1,4 +1,4 @@
-# Utilities for Benchmarking `evosax` Strategies
+# Benchmark Utilities for `evosax` Strategies 🦕 🦖 🐢
 
 This repository contains benchmark results, helper scripts, ES configurations and logs for testing the performance of evolutionary strategies in [`evosax`](https://github.com/RobertTLange/evosax/).
 
@@ -79,7 +79,7 @@ Waterworld (MA)	| 2 (max_iter=2000)	| - | - |
 
 | Cartpole-Easy  | Cartpole-Hard | MNIST | Brax|
 |---|---|---|---|
-<img src="https://github.com/RobertTLange/evojax-benchmarks/blob/main/figures/OpenES/cartpole_easy.png?raw=true" alt="drawing" width="200" />|<img src="https://github.com/RobertTLange/evojax-benchmarks/blob/main/figures/OpenES/cartpole_hard.png?raw=true" alt="drawing" width="200" />| <img src="https://github.com/RobertTLange/evojax-benchmarks/blob/main/figures/OpenES/mnist.png?raw=true" alt="drawing" width="200" /> | <img src="https://github.com/RobertTLange/evojax-benchmarks/blob/main/figures/OpenES/brax.png?raw=true" alt="drawing" width="200" /> |
+<img src="https://github.com/RobertTLange/evosax-benchmarks/blob/main/figures/OpenES/cartpole_easy.png?raw=true" alt="drawing" width="200" />|<img src="https://github.com/RobertTLange/evosax-benchmarks/blob/main/figures/OpenES/cartpole_hard.png?raw=true" alt="drawing" width="200" />| <img src="https://github.com/RobertTLange/evosax-benchmarks/blob/main/figures/OpenES/mnist.png?raw=true" alt="drawing" width="200" /> | <img src="https://github.com/RobertTLange/evosax-benchmarks/blob/main/figures/OpenES/brax.png?raw=true" alt="drawing" width="200" /> |
 ### Augmented Random Search
 
 

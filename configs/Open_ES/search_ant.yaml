@@ -17,7 +17,7 @@ param_search_args:
             - "test_perf_strat_mean"
     search_resources:
         num_search_batches: 1
-        num_evals_per_batch: 25
+        num_evals_per_batch: 100
         num_seeds_per_eval: 3
         # num_total_evals: 4
         # max_running_jobs: 8
@@ -29,11 +29,11 @@ param_search_args:
               es_params/lrate_init:
                 begin: 0.001
                 end: 0.04
-                bins: 5
+                bins: 10
               es_params/sigma_init:
                 begin: 0.01
                 end: 0.1
-                bins: 5
+                bins: 10
 
 # Parameters specific to an individual job
 single_job_args:
@@ -43,7 +43,7 @@ single_job_args:
     log_file: "log"
     err_file: "err"
     env_name: "snippets"
-    time_per_job: "00:05:00"
+    time_per_job: "00:10:00"
     # gpu_prefix: "cuda"
     queue:
         # - "rob.q"

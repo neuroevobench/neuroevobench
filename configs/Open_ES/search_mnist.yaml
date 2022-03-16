@@ -3,8 +3,8 @@ meta_job_args:
     project_name: "es_bench"
     experiment_type: "hyperparameter-search"
     base_train_fname: "train.py"  # or "mle_bash.sh" for bash script
-    base_train_config: "configs/Open_ES/ant.yaml"
-    experiment_dir: "experiments/Open_ES/ant"
+    base_train_config: "configs/Open_ES/mnist.yaml"
+    experiment_dir: "experiments/Open_ES/mnist"
 
 # Parameters specific to the hyperparameter search
 param_search_args:
@@ -38,12 +38,12 @@ param_search_args:
 # Parameters specific to an individual job
 single_job_args:
     job_name: "es_bench"
-    num_gpus: 1
-    num_logical_cores: 4
+    # num_gpus: 1
+    num_logical_cores: 10
     log_file: "log"
     err_file: "err"
     env_name: "snippets"
-    time_per_job: "00:02:00"
+    time_per_job: "00:04:00"
     # gpu_prefix: "cuda"
     # queue:
         #- "rob.q"

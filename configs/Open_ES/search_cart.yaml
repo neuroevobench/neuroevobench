@@ -16,8 +16,8 @@ param_search_args:
         eval_metrics:
             - "test_perf_strat_mean"
     search_resources:
-        num_search_batches: 4
-        num_evals_per_batch: 25
+        num_search_batches: 1
+        num_evals_per_batch: 100
         num_seeds_per_eval: 3
         # num_total_evals: 4
         # max_running_jobs: 8

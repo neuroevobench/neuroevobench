@@ -1,7 +1,7 @@
 train_config:
   num_generations: 2000
   evaluate_every_gen: 40
-  num_devices: 1
+  num_devices: 20
   device_type: "gpu"
 
   es_name: "Open_ES"
@@ -34,10 +34,15 @@ train_config:
 
   network_name: "CNN"
   network_config: 
-    num_hidden_units: 32
-    num_hidden_layers: 4
-    hidden_activation: "tanh"
-    output_activation: "tanh"
+    depth_1: 1
+    depth_2: 1
+    features_1: 8
+    features_2: 16
+    kernel_1: 5
+    kernel_2: 5
+    strides_1: 1
+    strides_2: 1
+    num_linear_layers: 0
 
 log_config:
   time_to_track: ["num_gens", "num_total_steps"]

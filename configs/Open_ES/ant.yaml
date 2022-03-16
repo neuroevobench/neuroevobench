@@ -1,5 +1,5 @@
 train_config:
-  num_generations: 500
+  num_generations: 1000
   evaluate_every_gen: 25
   num_devices: 16
   device_type: "cpu"

@@ -32,10 +32,16 @@ def main(config, log):
         num_output_units=train_evaluator.action_shape,
     )
 
-    if config.network_name != "LSTM":
+    if config.network_name == "MLP":
         params = network.init(
             rng,
             x=jnp.ones([1, train_evaluator.input_shape[0]]),
+            rng=rng,
+        )
+    elif config.network_name == "CNN":
+        params = network.init(
+            rng,
+            x=jnp.ones(train_evaluator.input_shape),
             rng=rng,
         )
     else:
@@ -96,23 +102,34 @@ def main(config, log):
 
         # Rollout population performance, reshape fitness & update strategy.
         fitness = train_evaluator.rollout(rng_eval, reshaped_params)
-        fit_re = fit_shaper.apply(x, fitness.mean(axis=1))
+        # Separate loss/acc when evolving classifier
+        if type(fitness) == tuple:
+            fitness_to_opt, fitness_to_log = fitness[0], fitness[1]
+        else:
+            fitness_to_opt, fitness_to_log = fitness, fitness
+        fit_re = fit_shaper.apply(x, fitness_to_opt.mean(axis=1))
         es_state = strategy.tell(x, fit_re, es_state, es_params)
 
         # Update the logging instance.
-        es_log = es_logging.update(es_log, x, fitness.mean(axis=1))
+        es_log = es_logging.update(es_log, x, fitness_to_log.mean(axis=1))
 
         # Sporadically evaluate the mean & best performance on test evaluator.
         if (gen + 1) % config.evaluate_every_gen == 0:
             rng, rng_test = jax.random.split(rng)
             # Stack best params seen & mean strategy params for eval
-            best_params = es_state["best_member"]
+            best_params = es_log["top_params"][0]
             mean_params = es_state["mean"]
             x_test = jnp.stack([best_params, mean_params], axis=0)
             reshaped_test_params = test_param_reshaper.reshape(x_test)
             test_fitness = test_evaluator.rollout(
                 rng_test, reshaped_test_params
-            ).mean(axis=1)
+            )
+
+            # Separate loss/acc when evolving classifier
+            if type(test_fitness) == tuple:
+                test_fitness_to_log = test_fitness[1].mean(axis=1)
+            else:
+                test_fitness_to_log = test_fitness.mean(axis=1)
             log.update(
                 {
                     "num_gens": gen + 1,
@@ -123,8 +140,8 @@ def main(config, log):
                 {
                     "train_perf_best": es_log["log_top_1"][gen],
                     "train_perf_gen_mean": es_log["log_gen_mean"][gen],
-                    "test_perf_best": test_fitness[0],
-                    "test_perf_strat_mean": test_fitness[1],
+                    "test_perf_best": test_fitness_to_log[0],
+                    "test_perf_strat_mean": test_fitness_to_log[1],
                 },
                 save=True,
             )

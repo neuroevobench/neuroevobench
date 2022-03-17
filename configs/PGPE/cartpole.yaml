@@ -1,48 +1,43 @@
 train_config:
-  num_generations: 2000
-  evaluate_every_gen: 40
-  num_devices: 1
-  device_type: "gpu"
+  num_generations: 200
+  evaluate_every_gen: 10
+  num_devices: 4
+  device_type: "cpu"
 
-  es_name: "Open_ES"
+  es_name: "PGPE_ES"
   es_config:
     popsize: 100
     opt_name: "adam"
   es_params:
-    lrate_init: 0.01
+    lrate_init: 0.04
     lrate_decay: 0.999
     lrate_limit: 0.001
-    sigma_init: 0.03
+    sigma_init: 0.1
     sigma_decay: 0.999
     sigma_limit: 0.01
     init_min: 0.0
     init_max: 0.0
 
-  problem_name: "Supervised"
+  problem_name: "Gym"
   problem_train_config:
-    task_name: "MNIST"
-    batch_size: 1024
+    env_name: "CartPole-v1"
+    num_env_steps: 200
+    num_rollouts: 20
   problem_test_config:
-    task_name: "MNIST"
-    batch_size: 10000
-
+    env_name: "CartPole-v1"
+    num_env_steps: 200
+    num_rollouts: 164
+  
   fitness_config:
     maximize: true
-    centered_rank: true
+    centered_rank: false
     z_score: true
     w_decay: 0.0
 
-  network_name: "CNN"
+  network_name: "LSTM"
   network_config: 
-    depth_1: 1
-    depth_2: 1
-    features_1: 8
-    features_2: 16
-    kernel_1: 5
-    kernel_2: 5
-    strides_1: 1
-    strides_2: 1
-    num_linear_layers: 0
+    num_hidden_units: 16
+    output_activation: "categorical"
 
 log_config:
   time_to_track: ["num_gens", "num_total_steps"]

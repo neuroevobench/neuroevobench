@@ -4,7 +4,7 @@ train_config:
   num_devices: 1
   device_type: "gpu"
 
-  es_name: "Open_ES"
+  es_name: "PGPE_ES"
   es_config:
     popsize: 100
     opt_name: "adam"
@@ -28,8 +28,8 @@ train_config:
 
   fitness_config:
     maximize: true
-    centered_rank: true
-    z_score: true
+    centered_rank: false
+    z_score: false
     w_decay: 0.0
 
   network_name: "CNN"

@@ -1,48 +1,45 @@
 train_config:
-  num_generations: 2000
-  evaluate_every_gen: 40
-  num_devices: 1
-  device_type: "gpu"
+  num_generations: 1000
+  evaluate_every_gen: 25
+  num_devices: 16
+  device_type: "cpu"
 
-  es_name: "Open_ES"
+  es_name: "Augmented_RS"
   es_config:
-    popsize: 100
+    popsize: 256
     opt_name: "adam"
   es_params:
     lrate_init: 0.01
     lrate_decay: 0.999
-    lrate_limit: 0.001
-    sigma_init: 0.03
+    lrate_limit: 0.005
+    sigma_init: 0.04
     sigma_decay: 0.999
-    sigma_limit: 0.01
+    sigma_limit: 0.001
     init_min: 0.0
     init_max: 0.0
 
-  problem_name: "Supervised"
+  problem_name: "Brax"
   problem_train_config:
-    task_name: "MNIST"
-    batch_size: 1024
+    env_name: "ant"
+    num_env_steps: 1000
+    num_rollouts: 16
   problem_test_config:
-    task_name: "MNIST"
-    batch_size: 10000
+    env_name: "ant"
+    num_env_steps: 1000
+    num_rollouts: 128
 
   fitness_config:
     maximize: true
-    centered_rank: true
-    z_score: true
+    centered_rank: false
+    z_score: false
     w_decay: 0.0
 
-  network_name: "CNN"
+  network_name: "MLP"
   network_config: 
-    depth_1: 1
-    depth_2: 1
-    features_1: 8
-    features_2: 16
-    kernel_1: 5
-    kernel_2: 5
-    strides_1: 1
-    strides_2: 1
-    num_linear_layers: 0
+    num_hidden_units: 32
+    num_hidden_layers: 4
+    hidden_activation: "tanh"
+    output_activation: "tanh"
 
 log_config:
   time_to_track: ["num_gens", "num_total_steps"]

@@ -25,15 +25,6 @@ then
         --purpose Grid ARS MNIST
     mle run configs/ARS/search_ant.yaml \
         --purpose Grid ARS Ant
-elif [[ "$1" == "CMA-ES" ]]
-then
-    echo "Run CMA-ES Grid Experiments"
-    mle run configs/CMAES/search_cart.yaml \
-        --purpose Grid CMA-ES Cartpole
-    mle run configs/CMAES/search_mnist.yaml \
-        --purpose Grid CMA-ES MNIST
-    mle run configs/CMAES/search_ant.yaml \
-        --purpose Grid CMA-ES Ant
 elif [[ "$1" == "Sep-CMA-ES" ]]
 then
     echo "Run Sep-CMA-ES Grid Experiments"
@@ -43,14 +34,23 @@ then
         --purpose Grid Sep-CMA-ES MNIST
     mle run configs/SepCMAES/search_ant.yaml \
         --purpose Grid Sep-CMA-ES Ant
+elif [[ "$1" == "CMA-ES" ]]
+then
+    echo "Run CMA-ES Grid Experiments"
+    mle run configs/CMA_ES/search_cart.yaml \
+        --purpose Grid CMA-ES Cartpole
+    mle run configs/CMA_ES/search_mnist.yaml \
+        --purpose Grid CMA-ES MNIST
+    mle run configs/CMA_ES/search_ant.yaml \
+        --purpose Grid CMA-ES Ant
 elif [[ "$1" == "SimpleGA" ]]
 then
     echo "Run GA Grid Experiments"
-    mle run configs/SimpleGA/search_cart.yaml \
+    mle run configs/Simple_GA/search_cart.yaml \
         --purpose Grid GA Cartpole
-    mle run configs/SimpleGA/search_mnist.yaml \
+    mle run configs/Simple_GA/search_mnist.yaml \
         --purpose Grid GA MNIST
-    mle run configs/SimpleGA/search_ant.yaml \
+    mle run configs/Simple_GA/search_ant.yaml \
         --purpose Grid GA Ant
 else
     echo "Provide valid argument to bash script"

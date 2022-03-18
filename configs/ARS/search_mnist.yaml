@@ -38,15 +38,15 @@ param_search_args:
 # Parameters specific to an individual job
 single_job_args:
     job_name: "es_bench"
-    # num_gpus: 1
-    num_logical_cores: 10
+    num_gpus: 1
+    num_logical_cores: 4
     log_file: "log"
     err_file: "err"
     env_name: "snippets"
     time_per_job: "00:04:00"
-    # gpu_prefix: "cuda"
-    # queue:
-        #- "rob.q"
-        # - "cognition-all.q"
+    gpu_prefix: "cuda"
+    queue:
+        - "rob.q"
+        - "cognition-all.q"
     # exclude_nodes:
     #   - "cognition14.ml.tu-berlin.de"

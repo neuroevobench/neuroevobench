@@ -93,6 +93,7 @@ def main(config, log):
         maximize=config.fitness_config.maximize,
     )
     es_log = es_logging.initialize()
+
     print(f"START EVOLVING {train_param_reshaper.total_params} PARAMS.")
     print("Config", config.es_params)
     # Run ES Loop.

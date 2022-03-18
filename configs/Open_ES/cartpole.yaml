@@ -14,6 +14,7 @@ train_config:
     lrate_limit: 0.001
     sigma_init: 0.03
     sigma_decay: 0.999
+    sigma_limit: 0.01
 
   problem_name: "Gym"
   problem_train_config:

@@ -28,11 +28,11 @@ then
 elif [[ "$1" == "Sep-CMA-ES" ]]
 then
     echo "Run Sep-CMA-ES Grid Experiments"
-    mle run configs/SepCMAES/search_cart.yaml \
+    mle run configs/Sep_CMA_ES/search_cart.yaml \
         --purpose Grid Sep-CMA-ES Cartpole
-    mle run configs/SepCMAES/search_mnist.yaml \
+    mle run configs/Sep_CMA_ES/search_mnist.yaml \
         --purpose Grid Sep-CMA-ES MNIST
-    mle run configs/SepCMAES/search_ant.yaml \
+    mle run configs/Sep_CMA_ES/search_ant.yaml \
         --purpose Grid Sep-CMA-ES Ant
 elif [[ "$1" == "CMA-ES" ]]
 then

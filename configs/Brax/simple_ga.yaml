@@ -1,0 +1,47 @@
+train_config:
+  num_generations: 1000
+  evaluate_every_gen: 25
+  num_devices: 16
+  device_type: "cpu"
+
+  es_name: "Simple_GA"
+  es_config:
+    popsize: 256
+    elite_ratio: 0.1
+  es_params:
+    sigma_init: 0.1
+    cross_over_rate: 0.5
+    init_min: 0.0
+    init_max: 0.0
+
+  problem_name: "Brax"
+  problem_train_config:
+    env_name: "ant"
+    num_env_steps: 1000
+    num_rollouts: 16
+  problem_test_config:
+    env_name: "ant"
+    num_env_steps: 1000
+    num_rollouts: 128
+
+  fitness_config:
+    maximize: true
+    centered_rank: false
+    z_score: false
+    w_decay: 0.0
+
+  network_name: "MLP"
+  network_config: 
+    num_hidden_units: 32
+    num_hidden_layers: 4
+    hidden_activation: "tanh"
+    output_activation: "tanh"
+
+log_config:
+  time_to_track: ["num_gens", "num_total_steps"]
+  what_to_track: ["train_perf_best", "train_perf_gen_mean",
+                  "test_perf_best", "test_perf_strat_mean"]
+  verbose: true
+  print_every_k_updates: 1
+  overwrite: 1
+  model_type: "jax"

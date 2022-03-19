@@ -4,7 +4,7 @@ train_config:
   num_devices: 16
   device_type: "cpu"
 
-  es_name: "PGPE_ES"
+  es_name: "CMA_ES"
   es_config:
     popsize: 256
     elite_ratio: 0.5

@@ -26,9 +26,9 @@ param_search_args:
         search_schedule: "sync"
         search_params:
           real:
-              es_params/lrate_init:
-                begin: 0.001
-                end: 0.04
+              es_params/cross_over_rate:
+                begin: 0.1
+                end: 0.9
                 bins: 10
               es_params/sigma_init:
                 begin: 0.01

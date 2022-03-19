@@ -44,8 +44,8 @@ single_job_args:
     err_file: "err"
     env_name: "jax-cuda" #"snippets"
     time_per_job: "00:04:00"
-    # partition:
-    #     - "ex_scioi_gpu"
+    partition:
+        - "ex_scioi_gpu"
     #     - "scioi_gpu"
     gpu_type: "v100s"
     memory_per_cpu: 5000

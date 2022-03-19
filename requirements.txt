@@ -1,0 +1,5 @@
+evosax==0.0.5
+brax
+torch
+torchvision
+mle-toolbox[full]==0.3.4

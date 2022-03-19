@@ -42,16 +42,16 @@ single_job_args:
     num_logical_cores: 2
     log_file: "log"
     err_file: "err"
-    env_name: "jax-cuda" #"snippets"
+    env_name: "snippets" #"jax-cuda" #
     time_per_job: "00:00:20"
-    # gpu_prefix: "cuda"
-    # queue:
-    #     # - "rob.q"
-    #     - "cognition-all.q"
-    # exclude_nodes:
-    #   - "cognition13.ml.tu-berlin.de"
-    #   - "cognition14.ml.tu-berlin.de"
-    partition: "ex_scioi_node"
+    gpu_prefix: "cuda"
+    queue:
+        # - "rob.q"
+        - "cognition-all.q"
+    exclude_nodes:
+      - "cognition13.ml.tu-berlin.de"
+      - "cognition14.ml.tu-berlin.de"
+    # partition: "ex_scioi_node"
         #- "ex_scioi_gpu"
     # gpu_type: "V100S"
-    memory_per_cpu: 5000
+    # memory_per_cpu: 5000

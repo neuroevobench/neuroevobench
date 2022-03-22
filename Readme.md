@@ -68,7 +68,7 @@ RERUN PGPE FOR CART WITHOUT ZSCORING?
 - lrate_init: begin: 0.001, end: 0.04
 - sigma_init: begin: 0.01, end: 0.1
 - no fitness reshape + 0.1 elite ratio
-- Cart (✓), Ant (W), MNIST (✓)
+- Cart (✓), Ant (✓), MNIST (✓)
 
 --------------------------------------
 #### Simple Genetic
@@ -82,13 +82,13 @@ RERUN PGPE FOR CART WITHOUT ZSCORING?
 
 - c_m: begin: 0.5, end: 1.5
 - sigma_init: begin: 0.01, end: 1.0
-- Cart (✓), Ant (-), MNIST (W)
+- Cart (✓), Ant (-), MNIST (✓)
 
 #### Sep-CMA-ES
 
 - c_m: begin: 0.5, end: 1.5
 - sigma_init: begin: 0.01, end: 1.0
-- Cart (✓), Ant (-), MNIST (W)
+- Cart (✓), Ant (W), MNIST (✓)
 
 --------------------------------------
 ### Brax Large Experiments
@@ -103,15 +103,15 @@ RERUN PGPE FOR CART WITHOUT ZSCORING?
     - AAAI Paper + Code clean up
     - ICLR Paper + Code clean up
 - Orga:
+    - [x] Email Peich TU for Bescheinigung Visa
+    - [x] Book flight Chris Rom
     - Beurlaubung Studium tuPort
-    - Email TU for Bescheinigung Visa
     - Passport sticker Berlin
     - Travel expenses TU (Portugal & AAAI fees)
-    - Book flight Chris Rom
-    - Ask Sebastian about Summer School?
+    - Ask Sebastian about Summer School? Answer Matteo
 - Twitter/SM:
+    - [x] Promote podcast/linkedin/homepage
     - Promote evosax talk
-    - Promote podcast/linkedin/homepage
     - Read paper Kirsch Symmetries
     - Prepare ML Collage
 - Code ES algos

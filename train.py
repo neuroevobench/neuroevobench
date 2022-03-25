@@ -24,6 +24,10 @@ def setup_es_problem(config):
 def main(config, log):
     """Running an ES loop."""
     # Setup task & network apply function.
+    if "env_name" in config.problem_test_config.toDict().keys():
+        config.problem_test_config.env_name = (
+            config.problem_train_config.env_name
+        )
     rng, train_evaluator, test_evaluator = setup_es_problem(config)
 
     # Setup network & generate placeholder params.

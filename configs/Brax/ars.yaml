@@ -1,18 +1,18 @@
 train_config:
-  num_generations: 1000
+  num_generations: 2000
   evaluate_every_gen: 25
-  num_devices: 16
-  device_type: "cpu"
+  num_devices: 1
+  device_type: "gpu"
 
   es_name: "Augmented_RS"
   es_config:
     popsize: 256
     opt_name: "adam"
   es_params:
-    lrate_init: 0.01
+    lrate_init: 0.018
     lrate_decay: 0.999
     lrate_limit: 0.005
-    sigma_init: 0.04
+    sigma_init: 0.03
     sigma_decay: 0.999
     sigma_limit: 0.001
     init_min: 0.0

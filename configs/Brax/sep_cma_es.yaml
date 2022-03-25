@@ -1,16 +1,16 @@
 train_config:
-  num_generations: 1000
+  num_generations: 2000
   evaluate_every_gen: 25
-  num_devices: 16
-  device_type: "cpu"
+  num_devices: 1
+  device_type: "gpu"
 
   es_name: "Sep_CMA_ES"
   es_config:
     popsize: 256
     elite_ratio: 0.5
   es_params:
-    c_m: 1.0
-    sigma_init: 1.0
+    c_m: 0.944
+    sigma_init: 0.063
     init_min: 0.0
     init_max: 0.0
 

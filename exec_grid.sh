@@ -52,6 +52,21 @@ then
         --purpose Grid GA MNIST
     mle run configs/Simple_GA/search_ant.yaml \
         --purpose Grid GA Ant
+elif [[ "$1" == "SimpleGA" ]]
+then
+    echo "Run Brax Experiments"
+    mle run configs/Brax/search_ars.yaml \
+        --purpose Brax ARS Long
+    mle run configs/Brax/search_open_es.yaml \
+        --purpose Brax OpenES Long
+    mle run configs/Brax/search_pgpe.yaml \
+        --purpose Brax PGPE Long
+    mle run configs/Brax/search_simple_ga.yaml \
+        --purpose Brax Simple GA Long
+    mle run configs/Brax/search_sep_cma_es.yaml \
+        --purpose Brax Sep-CMA-ES Long
+    mle run configs/Brax/search_cma_es.yaml \
+        --purpose Brax CMA-ES Long
 else
     echo "Provide valid argument to bash script"
 fi

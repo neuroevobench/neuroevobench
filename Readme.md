@@ -40,55 +40,9 @@ Full grid run for one ES -> 10 min + 2.5 days + 1 day => 2 per week?
 
 RERUN PGPE FOR CART WITHOUT ZSCORING?
 
-- [x] 18/03: Finish Ant -> OpenES, PGPE, ARS
-- [x] 19/03: Collect ARS-Cart, Genetic-Cart
-- [x] 19/03: Collect CMA-ES-Cart, Sep-CMA-ES-Cart
-- [x] 19/03: CMA-ES-MNIST, Sep-CMA-ES-MNIST -> V100S/RTX2080Ti
+- [ ] Brax experiments (90 runs on GPU)
+- [ ] Runtimes ask/tell
 
-- Later: CMA-ES-ant, Sep-CMA-ES-ant -> V100S?
-- Later++: Brax experiments (90 runs on GPU)
-
-### Hyperparameter Ranges (10x10 and 5x5 grids)
-
-#### Open ES (Adam)
-
-- lrate_init: begin: 0.001, end: 0.04
-- sigma_init: begin: 0.01, end: 0.1
-- Cart (✓), Ant (✓), MNIST (✓)
-
-#### PGPE (Adam)
-
-- lrate_init: begin: 0.001, end: 0.04
-- sigma_init: begin: 0.01, end: 0.1
-- no fitness reshape + 0.1 elite ratio
-- Cart (✓), Ant (✓), MNIST (✓)
-
-#### ARS (Adam)
-
-- lrate_init: begin: 0.001, end: 0.04
-- sigma_init: begin: 0.01, end: 0.1
-- no fitness reshape + 0.1 elite ratio
-- Cart (✓), Ant (✓), MNIST (✓)
-
---------------------------------------
-#### Simple Genetic
-
-- cross_over_rate: begin: 0.1, end: 0.9
-- sigma_init: begin: 0.01, end: 0.5
-- no fitness reshape + 0.1 elite ratio
-- Cart (✓), Ant (W), MNIST (✓)
-
-#### CMA-ES
-
-- c_m: begin: 0.5, end: 1.5
-- sigma_init: begin: 0.01, end: 1.0
-- Cart (✓), Ant (-), MNIST (✓)
-
-#### Sep-CMA-ES
-
-- c_m: begin: 0.5, end: 1.5
-- sigma_init: begin: 0.01, end: 1.0
-- Cart (✓), Ant (W), MNIST (✓)
 
 --------------------------------------
 ### Brax Large Experiments
@@ -111,7 +65,7 @@ RERUN PGPE FOR CART WITHOUT ZSCORING?
     - Ask Sebastian about Summer School? Answer Matteo
 - Twitter/SM:
     - [x] Promote podcast/linkedin/homepage
-    - Promote evosax talk
+    - [x] Promote evosax talk
     - Read paper Kirsch Symmetries
     - Prepare ML Collage
 - Code ES algos
@@ -124,3 +78,28 @@ RERUN PGPE FOR CART WITHOUT ZSCORING?
     - Run base experiments for MNIST/F-MNIST
     - Investigate transfer (tasks, multi-ES, GD-ES)
 
+
+```python
+# Evaluation Function
+def eval_fn(seed, params):
+	score = ...  # evaluate params on seed
+	return score
+
+member_scores = []
+
+# Loop over population members
+for params in pop_members:
+	seed_scores = []
+    # Loop over stochastic evaluations
+	for seed_id in num_evals:
+    	seed_scores.append(eval_fn(seed_id, params))
+    # Store mean performance
+    member_scores.append(mean(seed_scores))
+
+# Vectorize over stochastic evaluations
+score_eval = jax.vmap(eval_fn, in_axes=(0, None))
+# Device-Parallelize over population members
+pop_eval = jax.pmap(score_eval, in_axes=(None, 0))
+# Execute both map strategies (seed & members)
+member_scores = pop_eval(num_evals, pop_members).mean(axis=1)
+```

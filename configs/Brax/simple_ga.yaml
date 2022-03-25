@@ -1,16 +1,16 @@
 train_config:
-  num_generations: 1000
+  num_generations: 2000
   evaluate_every_gen: 25
-  num_devices: 16
-  device_type: "cpu"
+  num_devices: 1
+  device_type: "gpu"
 
   es_name: "Simple_GA"
   es_config:
     popsize: 256
     elite_ratio: 0.1
   es_params:
-    sigma_init: 0.1
-    cross_over_rate: 0.5
+    sigma_init: 0.07
+    cross_over_rate: 0.456
     init_min: 0.0
     init_max: 0.0
 

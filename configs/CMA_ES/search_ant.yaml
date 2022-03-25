@@ -32,7 +32,7 @@ param_search_args:
                 bins: 10
               es_params/sigma_init:
                 begin: 0.01
-                end: 1.0
+                end: 0.25
                 bins: 10
 
 # Parameters specific to an individual job
@@ -43,7 +43,7 @@ single_job_args:
     log_file: "log"
     err_file: "err"
     env_name: "jax-cuda"
-    time_per_job: "00:10:00"
+    time_per_job: "00:15:00"
     # gpu_prefix: "cuda"
     # queue:
     #     # - "rob.q"

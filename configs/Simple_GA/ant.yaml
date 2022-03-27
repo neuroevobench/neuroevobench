@@ -4,7 +4,7 @@ train_config:
   num_devices: 16
   device_type: "cpu"
 
-  es_name: "Simple_GA"
+  es_name: "SimpleGA"
   es_config:
     popsize: 256
     elite_ratio: 0.1

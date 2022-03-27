@@ -4,7 +4,7 @@ train_config:
   num_devices: 1
   device_type: "gpu"
 
-  es_name: "PGPE_ES"
+  es_name: "PGPE"
   es_config:
     popsize: 256
     opt_name: "adam"

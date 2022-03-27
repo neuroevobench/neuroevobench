@@ -4,7 +4,7 @@ train_config:
   num_devices: 16
   device_type: "cpu"
 
-  es_name: "Augmented_RS"
+  es_name: "ARS"
   es_config:
     popsize: 256
     opt_name: "adam"

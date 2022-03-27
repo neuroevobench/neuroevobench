@@ -4,7 +4,7 @@ train_config:
   num_devices: 1
   device_type: "gpu"
 
-  es_name: "Open_ES"
+  es_name: "OpenES"
   es_config:
     popsize: 100
     opt_name: "adam"
@@ -18,7 +18,7 @@ train_config:
     init_min: 0.0
     init_max: 0.0
 
-  problem_name: "Supervised"
+  problem_name: "Vision"
   problem_train_config:
     task_name: "MNIST"
     batch_size: 1024

@@ -1,0 +1,36 @@
+train_config:
+  env_name: "humanoid"
+  num_generations: 1500
+  eval_every_gen: 50
+  strategy_name: "Sep_CMA_ES"
+  popsize: 256
+  normalize_obs: True
+  es_config:
+    elite_ratio: 0.4
+    maximize: true
+  es_params:
+    sigma_init: 0.05
+    init_min: 0.0
+    init_max: 0.0
+  eval_config:
+    n_repeats: 16
+    test_n_repeats: 1
+    n_evaluations: 128
+
+
+log_config:
+  time_to_track: ["num_gens"]
+  what_to_track: ["train_perf", "test_perf"]
+  verbose: true
+  print_every_k_updates: 1
+  overwrite: 1
+  model_type: "jax"
+  use_wandb: true
+  wandb_config:
+    project: es-bench
+    group: cma-humanoid
+    name: seed0
+
+device_config:
+  device_type: "gpu"
+  num_devices: 1

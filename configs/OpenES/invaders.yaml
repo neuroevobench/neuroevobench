@@ -2,16 +2,22 @@ train_config:
   env_name: "SpaceInvaders-MinAtar"
   num_generations: 4000
   eval_every_gen: 50
-  strategy_name: "CMA_ES"
+  strategy_name: "OpenES"
   popsize: 256
   normalize_obs: False
   es_config:
-    elite_ratio: 0.1
+    centered_rank: True
     maximize: true
   es_params:
-    sigma_init: 0.025
+    sigma_init: 0.05
+    sigma_decay: 0.999
+    sigma_limit: 0.01
     init_min: 0.0
     init_max: 0.0
+  opt_params:
+    lrate_init: 0.01
+    lrate_decay: 0.999
+    lrate_limit: 0.001
   eval_config:
     n_repeats: 4
     test_n_repeats: 1
@@ -25,6 +31,11 @@ log_config:
   print_every_k_updates: 1
   overwrite: 1
   model_type: "jax"
+  use_wandb: true
+  wandb_config:
+    project: es-bench
+    group: cma-spaceinvarders
+    name: seed0
 
 device_config:
   device_type: "gpu"

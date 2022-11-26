@@ -1,5 +1,7 @@
-evosax==0.0.5
+evosax
+evojax
 brax
-torch
-torchvision
+tensorflow
+tensorflow_datasets
 mle-toolbox[full]==0.3.4
+xgboost

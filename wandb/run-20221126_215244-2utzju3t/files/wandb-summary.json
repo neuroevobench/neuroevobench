@@ -1,0 +1,1 @@
+{"time/num_gens": 100, "time/num_evals": 29815.86046511628, "time/time": "22-11-26/21:53", "time/time_elapsed": 57.67300987243652, "time/num_updates": 101, "stats/test_perf": 0.9518636532184621, "_timestamp": 1669496020, "_runtime": 56, "_step": 100, "_wandb": {"runtime": 57}}

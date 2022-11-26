@@ -1,17 +1,15 @@
-import jax
-import jax.numpy as jnp
 import numpy as np
 from evosax import Strategies
 from evojax.obs_norm import ObsNormalizer
 from evojax.sim_mgr import SimManager
 from evosax.utils.evojax_wrapper import Evosax2JAX_Wrapper
-from src.tasks import get_task
+from src.evojax_tasks import get_evojax_task
 
 
 def main(config, log):
     """Running an ES loop."""
     # Setup task & network apply function & ES.
-    train_task, test_task, policy = get_task(config.env_name)
+    train_task, test_task, policy = get_evojax_task(config.env_name)
     solver = Evosax2JAX_Wrapper(
         Strategies[config.strategy_name],
         param_size=policy.num_params,
@@ -40,7 +38,6 @@ def main(config, log):
         params = solver.ask()
         scores, _ = sim_mgr.eval_params(params=params, test=False)
         solver.tell(fitness=scores)
-        print(gen_counter)
         if gen_counter == 0 or (gen_counter + 1) % config.eval_every_gen == 0:
             test_scores, _ = sim_mgr.eval_params(
                 params=solver.best_params, test=True
@@ -53,6 +50,7 @@ def main(config, log):
                     "train_perf": float(np.nanmean(scores)),
                     "test_perf": float(np.nanmean(test_scores)),
                 },
+                model=solver.es_state.mean,
                 save=True,
             )
 
@@ -61,5 +59,5 @@ if __name__ == "__main__":
     from mle_toolbox import MLExperiment
 
     # Setup experiment run (visible GPUs for JAX parallelism)
-    mle = MLExperiment(config_fname="configs/Open_ES/ant.yaml")
+    mle = MLExperiment(config_fname="configs/Sep_CMA_ES/ant.yaml")
     main(mle.train_config, mle.log)

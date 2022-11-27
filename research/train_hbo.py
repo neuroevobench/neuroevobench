@@ -1,7 +1,7 @@
 import numpy as np
 from evosax import Strategies
-from src.hpo_wrapper import Evosax2HPO_Wrapper
-from src.hpo_tasks import HPOBHandler
+from evosax_benchmark.hpo_wrapper import Evosax2HPO_Wrapper
+from evosax_benchmark.hpo_tasks import HPOBHandler
 
 
 def main(config, log):

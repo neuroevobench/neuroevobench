@@ -1,4 +1,5 @@
 # Other to ignore
+wandb/
 data/
 experiments/
 .DS_Store

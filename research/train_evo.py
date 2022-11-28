@@ -10,7 +10,7 @@ def main(config, log):
     """Running an ES loop."""
     # Setup task & network apply function & ES.
     train_task, test_task, policy = get_evojax_task(
-        config.env_name, config.hidden_layers, config.hidden_dims
+        config.env_name, **config.task_config, **config.model_config
     )
     solver = Evosax2JAX_Wrapper(
         Strategies[config.strategy_name],

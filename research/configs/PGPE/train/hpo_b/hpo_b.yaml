@@ -1,0 +1,28 @@
+train_config:
+  num_generations: 100
+  strategy_name: "PGPE"
+  popsize: 8
+  es_config:
+    elite_ratio: 0.5
+    maximize: true
+  es_params:
+    sigma_init: 0.15
+    init_min: 0.5
+    init_max: 0.5
+
+log_config:
+  time_to_track: ["num_gens"]
+  what_to_track: ["test_perf"]
+  verbose: true
+  print_every_k_updates: 10
+  overwrite: 1
+  model_type: "jax"
+  use_wandb: true
+  wandb_config:
+    project: es-bench
+    group: PGPE-hpo
+    name: seed0
+
+device_config:
+  device_type: "gpu"
+  num_devices: 1

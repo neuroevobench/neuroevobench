@@ -1,60 +1,98 @@
-"""Utilities to port gymnax env to evoJAX tasks."""
-from typing import Tuple, Sequence
+"""Utilities to port gymnax/mnist env to evoJAX tasks."""
+from typing import Tuple, Sequence, Optional
 import chex
 import jax
 import jax.numpy as jnp
 from flax.struct import dataclass
-from flax import linen as nn
 
 import gymnax
 from gymnax import EnvState
 from evojax.task.base import VectorizedTask
 from evojax.task.base import TaskState
-from evojax.policy.base import PolicyNetwork
-from evojax.policy.base import PolicyState
-from evojax.util import get_params_format_fn
-import tensorflow_datasets as tfds
-from evojax.policy.convnet import ConvNetPolicy
 from evojax.task.brax_task import BraxTask
-from evojax.policy import MLPPolicy
+from .evojax_policies import MLPPolicy, MNISTPolicy, MinAtarPolicy
 
 
-def get_evojax_task(env_name: str):
-    if env_name in ["ant", "humanoid"]:
-        return get_brax_task(env_name)
-    elif env_name in ["SpaceInvaders-MinAtar", "Breakout-MinAtar"]:
-        return get_minatar_task(env_name)
-    elif env_name in ["mnist", "fashion_mnist"]:
-        return get_mnist_task(env_name)
+def get_evojax_task(
+    env_name: str,
+    hidden_layers: int = 4,
+    hidden_dims: int = 32,
+    max_steps: Optional[int] = 1000,
+    batch_size: Optional[int] = 1024,
+):
+    """Return EvoJAX conform task wrapper."""
+    # Create list of hidden dims per dense layer
+    hidden_dims_evo = hidden_layers * [hidden_dims]
+    if env_name in [
+        "ant",
+        "fetch",
+        "grasp",
+        "halfcheetah",
+        "hopper",
+        "humanoid",
+        "reacher",
+        "ur5e",
+        "walker2d",
+    ]:
+        train_task, test_task, policy = get_brax_task(
+            env_name, hidden_dims_evo, max_steps
+        )
+    elif env_name in [
+        "Asterix-MinAtar",
+        "Breakout-MinAtar",
+        "Freeway-MinAtar",
+        "SpaceInvaders-MinAtar",
+        "Seaquest-MinAtar",
+    ]:
+        train_task, test_task, policy = get_minatar_task(
+            env_name, hidden_dims_evo, max_steps
+        )
+    elif env_name in ["mnist", "fashion_mnist", "kmnist", "mnist_corrupted"]:
+        train_task, test_task, policy = get_mnist_task(
+            env_name, hidden_dims_evo, batch_size
+        )
+    return train_task, test_task, policy
 
 
-def get_brax_task(env_name: str = "ant"):
-    train_task = BraxTask(env_name, test=False)
-    test_task = BraxTask(env_name, test=True)
+def get_brax_task(
+    env_name: str = "ant",
+    hidden_dims: Sequence[int] = [32, 32, 32, 32],
+    max_steps: int = 1000,
+):
+    train_task = BraxTask(env_name, max_steps=max_steps, test=False)
+    test_task = BraxTask(env_name, max_steps=max_steps, test=True)
     policy = MLPPolicy(
         input_dim=train_task.obs_shape[0],
         output_dim=train_task.act_shape[0],
-        hidden_dims=4 * [32],
+        hidden_dims=hidden_dims,
     )
     return train_task, test_task, policy
 
 
-def get_minatar_task(env_name: str = "SpaceInvaders-MinAtar"):
-    train_task = GymnaxTask(env_name, max_steps=500, test=False)
-    test_task = GymnaxTask(env_name, max_steps=500, test=True)
+def get_minatar_task(
+    env_name: str = "SpaceInvaders-MinAtar",
+    hidden_dims: Sequence[int] = [32],
+    max_steps: int = 500,
+):
+    train_task = GymnaxTask(env_name, max_steps=max_steps, test=False)
+    test_task = GymnaxTask(env_name, max_steps=max_steps, test=True)
     policy = MinAtarPolicy(
         input_dim=train_task.obs_shape,
         output_dim=train_task.num_actions,
-        hidden_dim=32,
+        hidden_dims=hidden_dims,
     )
     return train_task, test_task, policy
 
 
-def get_mnist_task(env_name: str = "mnist"):
+def get_mnist_task(
+    env_name: str = "mnist",
+    hidden_dims: Sequence[int] = [],
+    batch_size: int = 1024,
+):
     # mnist, fashion_mnist, kmnist, mnist_corrupted
-    train_task = MNISTTask(env_name, batch_size=1024, test=False)
+    train_task = MNISTTask(env_name, batch_size=batch_size, test=False)
     test_task = MNISTTask(env_name, batch_size=None, test=True)
-    policy = ConvNetPolicy()
+    policy = MNISTPolicy(hidden_dims)
     return train_task, test_task, policy
 
 
@@ -108,45 +146,6 @@ class GymnaxTask(VectorizedTask):
         return self._step_fn(state, action)
 
 
-class CNN(nn.Module):
-    feat_dim: int
-    out_dim: int
-
-    @nn.compact
-    def __call__(self, x: chex.Array) -> chex.Array:
-        x = nn.Conv(features=16, kernel_size=(3, 3), padding="SAME", strides=1)(
-            x
-        )
-        x = nn.relu(x)
-        x = x.reshape((x.shape[0], -1))
-        x = nn.Dense(features=self.feat_dim)(x)
-        x = nn.relu(x)
-        x = nn.Dense(features=self.out_dim)(x)
-        return x
-
-
-class MinAtarPolicy(PolicyNetwork):
-    """Deterministic CNN policy - greedy action selection."""
-
-    def __init__(
-        self, input_dim: Sequence[int], hidden_dim: int, output_dim: int
-    ):
-        model = CNN(feat_dim=hidden_dim, out_dim=output_dim)
-        params = model.init(jax.random.PRNGKey(0), jnp.ones([1, *input_dim]))
-        self.num_params, format_params_fn = get_params_format_fn(params)
-        self._format_params_fn = jax.vmap(format_params_fn)
-        self._forward_fn = jax.vmap(model.apply)
-
-    def get_actions(
-        self, t_states: TaskState, params: chex.Array, p_states: PolicyState
-    ) -> Tuple[chex.Array, PolicyState]:
-        params = self._format_params_fn(params)
-        obs = jnp.expand_dims(t_states.obs, axis=1)
-        activations = self._forward_fn(params, obs)
-        action = jnp.argmax(activations, axis=2).squeeze()
-        return action, p_states
-
-
 @dataclass
 class MNISTState(TaskState):
     obs: chex.Array
@@ -181,6 +180,8 @@ class MNISTTask(VectorizedTask):
         batch_size: int = 1024,
         test: bool = False,
     ):
+        import tensorflow_datasets as tfds
+
         self.max_steps = 1
         self.obs_shape = tuple([28, 28, 1])
         self.act_shape = tuple([10])

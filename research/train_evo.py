@@ -9,7 +9,9 @@ from evosax_benchmark.evojax_tasks import get_evojax_task
 def main(config, log):
     """Running an ES loop."""
     # Setup task & network apply function & ES.
-    train_task, test_task, policy = get_evojax_task(config.env_name)
+    train_task, test_task, policy = get_evojax_task(
+        config.env_name, config.hidden_layers, config.hidden_dims
+    )
     solver = Evosax2JAX_Wrapper(
         Strategies[config.strategy_name],
         param_size=policy.num_params,

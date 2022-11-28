@@ -5,6 +5,8 @@ train_config:
   strategy_name: "Sep_CMA_ES"
   popsize: 256
   normalize_obs: True
+  hidden_layers: 4
+  hidden_dims: 32
   es_config:
     elite_ratio: 0.4
     maximize: true
@@ -25,7 +27,7 @@ log_config:
   print_every_k_updates: 1
   overwrite: 1
   model_type: "jax"
-  use_wandb: true
+  use_wandb: false
   wandb_config:
     project: es-bench
     group: cma-ant

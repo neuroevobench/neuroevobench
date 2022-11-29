@@ -1,37 +1,77 @@
-if [[ "$1" == "OpenES" ]]
+if [[ "$1" == "popsizes" ]]
 then
-    echo "Run Open ES Grid Experiments"
-    mle run configs/OpenES/search.yaml \
-        --purpose Grid OpenES F-MNIST \
-        --base_train_config configs/OpenES/fmnist.yaml \
-        --experiment_dir experiments/OpenES/fmnist
-    mle run configs/OpenES/search.yaml \
-        --purpose Grid OpenES Ant \
-        --base_train_config configs/OpenES/ant.yaml \
-        --experiment_dir experiments/OpenES/ant
-    mle run configs/OpenES/search.yaml \
-        --purpose Grid OpenES Humanoid \
-        --base_train_config configs/OpenES/humanoid.yaml \
-        --experiment_dir experiments/OpenES/humanoid
-    mle run configs/OpenES/search.yaml \
-        --purpose Grid OpenES SpaceInvaders \
-        --base_train_config configs/OpenES/spaceinvaders.yaml \
-        --experiment_dir experiments/OpenES/spaceinvaders
-    mle run configs/OpenES/search.yaml \
-        --purpose Grid OpenES Breakout \
-        --base_train_config configs/OpenES/breakout.yaml \
-        --experiment_dir experiments/OpenES/breakout
-elif [[ "$1" == "Sep_CMA_ES" ]]
+    echo "Run tuned ES experiments"
+    # OpenES
+    mle run configs/tuned.yaml \
+        --purpose OpenES ant \
+        --base_train_config configs/OpenES/train/brax/ant.yaml \
+        --experiment_dir experiments/tuned/OpenES/ant
+    mle run configs/tuned.yaml \
+        --purpose OpenES halfcheetah \
+        --base_train_config configs/OpenES/train/brax/halfcheetah.yaml \
+        --experiment_dir experiments/tuned/OpenES/halfcheetah
+    mle run configs/tuned.yaml \
+        --purpose OpenES humanoid \
+        --base_train_config configs/OpenES/train/brax/humanoid.yaml \
+        --experiment_dir experiments/tuned/OpenES/humanoid
+    mle run configs/tuned.yaml \
+        --purpose OpenES fetch \
+        --base_train_config configs/OpenES/train/brax/fetch.yaml \
+        --experiment_dir experiments/tuned/OpenES/fetch
+    # SNES
+    mle run configs/tuned.yaml \
+        --purpose SNES ant \
+        --base_train_config configs/SNES/train/brax/ant.yaml \
+        --experiment_dir experiments/tuned/SNES/ant
+    mle run configs/tuned.yaml \
+        --purpose SNES halfcheetah \
+        --base_train_config configs/SNES/train/brax/halfcheetah.yaml \
+        --experiment_dir experiments/tuned/SNES/halfcheetah
+    mle run configs/tuned.yaml \
+        --purpose SNES humanoid \
+        --base_train_config configs/SNES/train/brax/humanoid.yaml \
+        --experiment_dir experiments/tuned/SNES/humanoid
+    mle run configs/tuned.yaml \
+        --purpose SNES fetch \
+        --base_train_config configs/SNES/train/fetch.yaml \
+        --experiment_dir experiments/tuned/SNES/fetch
+    # PGPE
+    mle run configs/tuned.yaml \
+        --purpose PGPE ant \
+        --base_train_config configs/PGPE/train/brax/ant.yaml \
+        --experiment_dir experiments/tuned/SNES/ant
+    mle run configs/tuned.yaml \
+        --purpose PGPE halfcheetah \
+        --base_train_config configs/PGPE/train/brax/halfcheetah.yaml \
+        --experiment_dir experiments/tuned/PGPE/halfcheetah
+    mle run configs/tuned.yaml \
+        --purpose PGPE humanoid \
+        --base_train_config configs/PGPE/train/brax/humanoid.yaml \
+        --experiment_dir experiments/tuned/PGPE/humanoid
+    mle run configs/tuned.yaml \
+        --purpose PGPE fetch \
+        --base_train_config configs/PGPE/train/brax/fetch.yaml \
+        --experiment_dir experiments/tuned/PGPE/fetch
+    # Sep_CMA_ES
+    mle run configs/tuned.yaml \
+        --purpose Sep_CMA_ES ant \
+        --base_train_config configs/Sep_CMA_ES/train/brax/ant.yaml \
+        --experiment_dir experiments/tuned/Sep_CMA_ES/ant
+    mle run configs/tuned.yaml \
+        --purpose Sep_CMA_ES halfcheetah \
+        --base_train_config configs/Sep_CMA_ES/train/brax/halfcheetah.yaml \
+        --experiment_dir experiments/tuned/Sep_CMA_ES/halfcheetah
+    mle run configs/tuned.yaml \
+        --purpose Sep_CMA_ES humanoid \
+        --base_train_config configs/Sep_CMA_ES/train/brax/humanoid.yaml \
+        --experiment_dir experiments/tuned/Sep_CMA_ES/humanoid
+    mle run configs/tuned.yaml \
+        --purpose Sep_CMA_ES fetch \
+        --base_train_config configs/Sep_CMA_ES/train/brax/fetch.yaml \
+        --experiment_dir experiments/tuned/Sep_CMA_ES/fetch
+elif [[ "$1" == "modelsizes" ]]
 then
     echo "Run Sep-CMA-ES Grid Experiments"
-    mle run configs/Sep_CMA_ES/search.yaml \
-        --purpose Grid Sep_CMA_ES Ant \
-        --base_train_config configs/Sep_CMA_ES/ant.yaml \
-        --experiment_dir experiments/Sep_CMA_ES/ant
-    mle run configs/Sep_CMA_ES/search.yaml \
-        --purpose Grid Sep_CMA_ES Humanoid \
-        --base_train_config configs/Sep_CMA_ES/humanoid.yaml \
-        --experiment_dir experiments/Sep_CMA_ES/humanoid
 else
     echo "Provide valid argument to bash script"
 fi

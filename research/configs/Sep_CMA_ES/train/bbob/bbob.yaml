@@ -1,0 +1,82 @@
+train_config:
+  strategy_name: "Sep_CMA_ES"
+  popsize: 8
+  num_dims: 2
+  num_evals: 50
+  num_generations: 10
+
+  es_config:
+    elite_ratio: 0.5
+  es_params:
+    sigma_init: 0.15
+    init_min: 0.5
+    init_max: 0.5
+
+log_config:
+  time_to_track: ["num_gens"]
+  what_to_track:
+    - "Sphere_mean"
+    - "Sphere_best"
+    - "EllipsoidalOriginal_mean"
+    - "EllipsoidalOriginal_best"
+    - "RastriginOriginal_mean"
+    - "RastriginOriginal_best"
+    - "BuecheRastrigin_mean"
+    - "BuecheRastrigin_best"
+    - "LinearSlope_mean"
+    - "LinearSlope_best"
+    - "AttractiveSector_mean"
+    - "AttractiveSector_best"
+    - "StepEllipsoidal_mean"
+    - "StepEllipsoidal_best"
+    - "RosenbrockOriginal_mean"
+    - "RosenbrockOriginal_best"
+    - "RosenbrockRotated_mean"
+    - "RosenbrockRotated_best"
+    - "EllipsoidalRotated_mean"
+    - "EllipsoidalRotated_best"
+    - "Discus_mean"
+    - "Discus_best"
+    - "BentCigar_mean"
+    - "BentCigar_best"
+    - "SharpRidge_mean"
+    - "SharpRidge_best"
+    - "DifferentPowers_mean"
+    - "DifferentPowers_best"
+    - "RastriginRotated_mean"
+    - "RastriginRotated_best"
+    - "Weierstrass_mean"
+    - "Weierstrass_best"
+    - "SchaffersF7_mean"
+    - "SchaffersF7_best"
+    - "SchaffersF7IllConditioned_mean"
+    - "SchaffersF7IllConditioned_best"
+    - "GriewankRosenbrock_mean"
+    - "GriewankRosenbrock_best"
+    - "Schwefel_mean"
+    - "Schwefel_best"
+    - "Lunacek_mean"
+    - "Lunacek_best"
+    - "Gallagher101Me_mean"
+    - "Gallagher101Me_best"
+    - "Gallagher21Hi_mean"
+    - "Gallagher21Hi_best"
+  what_to_print:
+    - "Sphere_best"
+    - "AttractiveSector_best"
+    - "EllipsoidalRotated_best"
+    - "RastriginRotated_best"
+    - "Schwefel_best"
+  verbose: true
+  print_every_k_updates: 1
+  overwrite: 1
+  model_type: "jax"
+  use_wandb: false
+  wandb_config:
+    project: es-bench
+    group: Sep_CMA_ES-bbob
+    name: seed0
+
+device_config:
+  device_type: "gpu"
+  num_devices: 1

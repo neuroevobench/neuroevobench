@@ -21,15 +21,16 @@ class MLPPolicy(PolicyNetwork):
         output_dim: int,
         output_act_fn: str = "tanh",
     ):
-        model = MLP(
+        self.input_dim = [1, input_dim]
+        self.model = MLP(
             feat_dims=hidden_dims, out_dim=output_dim, out_fn=output_act_fn
         )
-        self.params = model.init(
-            jax.random.PRNGKey(0), jnp.ones([1, input_dim])
+        self.params = self.model.init(
+            jax.random.PRNGKey(0), jnp.ones(self.input_dim)
         )
         self.num_params, format_params_fn = get_params_format_fn(self.params)
         self._format_params_fn = jax.vmap(format_params_fn)
-        self._forward_fn = jax.vmap(model.apply)
+        self._forward_fn = jax.vmap(self.model.apply)
 
     def get_actions(
         self, t_states: TaskState, params: jnp.ndarray, p_states: PolicyState
@@ -66,13 +67,14 @@ class MinAtarPolicy(PolicyNetwork):
         hidden_dims: Sequence[int],
         output_dim: int,
     ):
-        model = MinAtarCNN(hidden_dims=hidden_dims, out_dim=output_dim)
-        self.params = model.init(
-            jax.random.PRNGKey(0), jnp.ones([1, *input_dim])
+        self.input_dim = [1, *input_dim]
+        self.model = MinAtarCNN(hidden_dims=hidden_dims, out_dim=output_dim)
+        self.params = self.model.init(
+            jax.random.PRNGKey(0), jnp.ones(self.input_dim)
         )
         self.num_params, format_params_fn = get_params_format_fn(self.params)
         self._format_params_fn = jax.vmap(format_params_fn)
-        self._forward_fn = jax.vmap(model.apply)
+        self._forward_fn = jax.vmap(self.model.apply)
 
     def get_actions(
         self, t_states: TaskState, params: chex.Array, p_states: PolicyState
@@ -113,13 +115,14 @@ class MNISTPolicy(PolicyNetwork):
         self,
         hidden_dims: Sequence[int],
     ):
-        model = MNIST_CNN(hidden_dims)
-        self.params = model.init(
-            jax.random.PRNGKey(0), jnp.zeros([1, 28, 28, 1])
+        self.input_dim = [1, 28, 28, 1]
+        self.model = MNIST_CNN(hidden_dims)
+        self.params = self.model.init(
+            jax.random.PRNGKey(0), jnp.zeros(self.input_dim)
         )
         self.num_params, format_params_fn = get_params_format_fn(self.params)
         self._format_params_fn = jax.vmap(format_params_fn)
-        self._forward_fn = jax.vmap(model.apply)
+        self._forward_fn = jax.vmap(self.model.apply)
 
     def get_actions(
         self, t_states: TaskState, params: jnp.ndarray, p_states: PolicyState

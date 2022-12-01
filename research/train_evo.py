@@ -4,6 +4,7 @@ from evojax.obs_norm import ObsNormalizer
 from evojax.sim_mgr import SimManager
 from evosax.utils.evojax_wrapper import Evosax2JAX_Wrapper
 from evosax_benchmark.evojax_tasks import get_evojax_task
+from evosax_benchmark.tuned_hparams import get_tuned_hparams
 
 
 def main(config, log):
@@ -12,12 +13,15 @@ def main(config, log):
     train_task, test_task, policy = get_evojax_task(
         config.env_name, **config.task_config, **config.model_config
     )
+    # Get tuned es_config from benchmark data
+    es_config = get_tuned_hparams(config.strategy_name, config.env_name)
+    print(f"Loaded es_config for {config.strategy_name} - {config.env_name}")
+    print(es_config)
     solver = Evosax2JAX_Wrapper(
         Strategies[config.strategy_name],
         param_size=policy.num_params,
         pop_size=config.popsize,
-        es_config=config.es_config,
-        es_params=config.es_params,
+        es_config=es_config,
         seed=config.seed_id,
     )
     obs_normalizer = ObsNormalizer(
@@ -61,5 +65,5 @@ if __name__ == "__main__":
     from mle_toolbox import MLExperiment
 
     # Setup experiment run (visible GPUs for JAX parallelism)
-    mle = MLExperiment(config_fname="configs/Sep_CMA_ES/ant.yaml")
+    mle = MLExperiment(config_fname="configs/brax.yaml")
     main(mle.train_config, mle.log)

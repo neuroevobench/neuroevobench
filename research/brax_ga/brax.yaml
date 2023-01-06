@@ -1,0 +1,40 @@
+train_config:
+  env_name: "ant"
+  num_generations: 5000
+  eval_every_gen: 50
+  strategy_name: "SimpleGA"
+  popsize: 256
+  normalize_obs: True
+  model_config:
+    hidden_layers: 0
+    hidden_dims: 32
+  task_config:
+    max_steps: 1000
+  es_params:
+    init_min: 0.0
+    init_max: 0.0
+    sigma_init: 0.1
+  es_config:
+    maximize: True
+  eval_config:
+    n_repeats: 16
+    test_n_repeats: 1
+    n_evaluations: 128
+
+
+log_config:
+  time_to_track: ["num_gens"]
+  what_to_track: ["train_perf", "test_perf"]
+  verbose: true
+  print_every_k_updates: 1
+  overwrite: 1
+  model_type: "jax"
+  use_wandb: true
+  wandb_config:
+    project: ga-bench
+    group: brax-ga-v2
+    name: seed0
+
+device_config:
+  device_type: "gpu"
+  num_devices: 1

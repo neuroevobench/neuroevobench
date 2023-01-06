@@ -1,15 +1,11 @@
 """Utilities to port gymnax/mnist env to evoJAX tasks."""
-from typing import Tuple, Sequence, Optional
-import chex
-import jax
-import jax.numpy as jnp
-from flax.struct import dataclass
-
+from typing import Sequence, Optional
 from gymnax.utils.evojax_wrapper import GymnaxTask
-from evojax.task.base import VectorizedTask
-from evojax.task.base import TaskState
 from evojax.task.brax_task import BraxTask
-from .evojax_policies import MLPPolicy, MNISTPolicy, MinAtarPolicy
+from .evojax_policies import BraxPolicy, MNISTPolicy, MinAtarPolicy, GymPolicy
+
+# from .mnist_tasks import MNISTTask
+from .mnist_tasks_torch import MNISTTask
 
 
 def get_evojax_task(
@@ -46,6 +42,14 @@ def get_evojax_task(
         train_task, test_task, policy = get_minatar_task(
             env_name, hidden_dims_evo, max_steps
         )
+    elif env_name in [
+        "CartPole-v1",
+        "Acrobot-v1",
+        "Pendulum-v1",
+    ]:
+        train_task, test_task, policy = get_gym_task(
+            env_name, hidden_dims_evo, max_steps
+        )
     elif env_name in ["mnist", "fashion_mnist", "kmnist", "mnist_corrupted"]:
         train_task, test_task, policy = get_mnist_task(
             env_name, hidden_dims_evo, batch_size
@@ -60,7 +64,7 @@ def get_brax_task(
 ):
     train_task = BraxTask(env_name, max_steps=max_steps, test=False)
     test_task = BraxTask(env_name, max_steps=max_steps, test=True)
-    policy = MLPPolicy(
+    policy = BraxPolicy(
         input_dim=train_task.obs_shape[0],
         output_dim=train_task.act_shape[0],
         hidden_dims=hidden_dims,
@@ -83,6 +87,21 @@ def get_minatar_task(
     return train_task, test_task, policy
 
 
+def get_gym_task(
+    env_name: str = "CartPole-v1",
+    hidden_dims: Sequence[int] = [32],
+    max_steps: int = 500,
+):
+    train_task = GymnaxTask(env_name, max_steps=max_steps, test=False)
+    test_task = GymnaxTask(env_name, max_steps=max_steps, test=True)
+    policy = GymPolicy(
+        input_dim=train_task.obs_shape,
+        output_dim=train_task.num_actions,
+        hidden_dims=hidden_dims,
+    )
+    return train_task, test_task, policy
+
+
 def get_mnist_task(
     env_name: str = "mnist",
     hidden_dims: Sequence[int] = [],
@@ -93,83 +112,3 @@ def get_mnist_task(
     test_task = MNISTTask(env_name, batch_size=None, test=True)
     policy = MNISTPolicy(hidden_dims)
     return train_task, test_task, policy
-
-
-@dataclass
-class MNISTState(TaskState):
-    obs: chex.Array
-    labels: chex.Array
-
-
-def sample_batch(
-    key: chex.PRNGKey, data: chex.Array, labels: chex.Array, batch_size: int
-):
-    idx = jax.random.choice(
-        key, a=data.shape[0], shape=(batch_size,), replace=False
-    )
-    data_sub = jnp.take(data, indices=idx, axis=0)
-    labels_sub = jnp.take(labels, indices=idx, axis=0)
-    return data_sub, labels_sub
-
-
-def loss(prediction: chex.Array, target: chex.Array) -> chex.Array:
-    target = jax.nn.one_hot(target, 10)
-    return -jnp.mean(jnp.sum(prediction * target, axis=1))
-
-
-def accuracy(prediction: chex.Array, target: chex.Array) -> chex.Array:
-    predicted_class = jnp.argmax(prediction, axis=1)
-    return jnp.mean(predicted_class == target)
-
-
-class MNISTTask(VectorizedTask):
-    def __init__(
-        self,
-        env_name: str = "mnist",
-        batch_size: int = 1024,
-        test: bool = False,
-    ):
-        import tensorflow_datasets as tfds
-
-        self.max_steps = 1
-        self.obs_shape = tuple([28, 28, 1])
-        self.act_shape = tuple([10])
-        image, labels = tfds.as_numpy(
-            tfds.load(
-                env_name,
-                split="test" if test else "train",
-                batch_size=-1,
-                as_supervised=True,
-            )
-        )
-        data = image / 255.0
-
-        def reset_fn(key: chex.PRNGKey) -> MNISTState:
-            if test:
-                batch_data, batch_labels = data, labels
-            else:
-                batch_data, batch_labels = sample_batch(
-                    key, data, labels, batch_size
-                )
-            return MNISTState(obs=batch_data, labels=batch_labels)
-
-        self._reset_fn = jax.jit(jax.vmap(reset_fn))
-
-        def step_fn(
-            state: MNISTState, action: chex.Array
-        ) -> Tuple[MNISTState, chex.Array, chex.Array]:
-            if test:
-                reward = accuracy(action, state.labels)
-            else:
-                reward = -loss(action, state.labels)
-            return state, reward, jnp.ones(())
-
-        self._step_fn = jax.jit(jax.vmap(step_fn))
-
-    def reset(self, key: chex.Array) -> MNISTState:
-        return self._reset_fn(key)
-
-    def step(
-        self, state: MNISTState, action: chex.Array
-    ) -> Tuple[MNISTState, chex.Array, chex.Array]:
-        return self._step_fn(state, action)

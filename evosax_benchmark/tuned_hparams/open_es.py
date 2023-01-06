@@ -107,4 +107,7 @@ class OpenES_configs(object):
                 "sigma_limit": 0.01,
             }
         else:
-            raise ValueError("Provide valid env_name.")
+            return {
+                "centered_rank": True,
+                "maximize": True,
+            }

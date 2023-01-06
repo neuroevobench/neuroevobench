@@ -26,7 +26,7 @@ log_config:
   print_every_k_updates: 1
   overwrite: 1
   model_type: "jax"
-  use_wandb: false
+  use_wandb: true
   wandb_config:
     project: es-bench
     group: brax

@@ -62,4 +62,8 @@ class SNES_configs(object):
                 "sigma_init": 0.075,
             }
         else:
-            raise ValueError("Provide valid env_name.")
+            return {
+                "maximize": True,
+                "temperature": 16.0,
+                "sigma_init": 0.1,
+            }

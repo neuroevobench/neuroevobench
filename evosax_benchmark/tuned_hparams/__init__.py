@@ -2,6 +2,7 @@ from .open_es import OpenES_configs
 from .pgpe import PGPE_configs
 from .sep_cma_es import Sep_CMA_ES_configs
 from .snes import SNES_configs
+from .des import DES_configs
 
 
 all_configs = {
@@ -9,6 +10,7 @@ all_configs = {
     "PGPE": PGPE_configs,
     "Sep_CMA_ES": Sep_CMA_ES_configs,
     "SNES": SNES_configs,
+    "DES": DES_configs,
 }
 
 
@@ -22,5 +24,6 @@ __all__ = [
     "PGPE_configs",
     "Sep_CMA_ES_configs",
     "SNES_configs",
+    "DES_configs",
     "get_tuned_hparams",
 ]

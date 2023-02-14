@@ -78,6 +78,34 @@ def get_mnist_loaders(test: bool = False):
     return loader
 
 
+def get_kmnist_loaders(test: bool = False):
+    try:
+        import torch
+        from torchvision import datasets, transforms
+    except ModuleNotFoundError as err:
+        raise ModuleNotFoundError(
+            f"{err}. You need to install `torch` and `torchvision`"
+            "to use the `VisionFitness` module."
+        )
+
+    transform = transforms.Compose(
+        [
+            transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,)),
+            transforms.Lambda(lambda x: x.permute(1, 2, 0)),
+        ]
+    )
+    bs = 10000 if test else 60000
+    loader = torch.utils.data.DataLoader(
+        datasets.KMNIST(
+            "~/data", download=True, train=not test, transform=transform
+        ),
+        batch_size=bs,
+        shuffle=False,
+    )
+    return loader
+
+
 def get_fashion_loaders(test: bool = False):
     try:
         import torch
@@ -178,6 +206,8 @@ def get_array_data(task_name: str = "MNIST", test: bool = False):
         loader = get_mnist_loaders(test)
     elif task_name == "fmnist":
         loader = get_fashion_loaders(test)
+    elif task_name == "kmnist":
+        loader = get_kmnist_loaders(test)
     elif task_name == "CIFAR10":
         loader = get_cifar_loaders(test)
     elif task_name == "SVHN":

@@ -1,11 +1,11 @@
 """Utilities to port gymnax/mnist env to evoJAX tasks."""
 from typing import Sequence, Optional
 from gymnax.utils.evojax_wrapper import GymnaxTask
-from evojax.task.brax_task import BraxTask
-from .evojax_policies import BraxPolicy, MNISTPolicy, MinAtarPolicy, GymPolicy
-
-# from .mnist_tasks import MNISTTask
-from .mnist_tasks_torch import MNISTTask
+from .brax import BraxTask, BraxPolicy
+from .gym import GymPolicy
+from .hpob import HPOBTask, Evosax2HPO_Wrapper
+from .minatar import MinAtarPolicy
+from .mnist import MNISTTask, MNISTPolicy
 
 
 def get_evojax_task(
@@ -28,6 +28,7 @@ def get_evojax_task(
         "reacher",
         "ur5e",
         "walker2d",
+        "ant_modified",
     ]:
         train_task, test_task, policy = get_brax_task(
             env_name, hidden_dims_evo, max_steps
@@ -50,7 +51,7 @@ def get_evojax_task(
         train_task, test_task, policy = get_gym_task(
             env_name, hidden_dims_evo, max_steps
         )
-    elif env_name in ["mnist", "fashion_mnist", "kmnist", "mnist_corrupted"]:
+    elif env_name in ["mnist", "fmnist", "kmnist", "mnist_corrupted"]:
         train_task, test_task, policy = get_mnist_task(
             env_name, hidden_dims_evo, batch_size
         )
@@ -98,6 +99,9 @@ def get_gym_task(
         input_dim=train_task.obs_shape,
         output_dim=train_task.num_actions,
         hidden_dims=hidden_dims,
+        output_act_fn="argmax"
+        if env_name in ["CartPole-v1", "Acrobot-v1"]
+        else None,
     )
     return train_task, test_task, policy
 

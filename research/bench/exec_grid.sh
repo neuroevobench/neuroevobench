@@ -6,14 +6,14 @@ then
     #     --purpose OpenES ant \
     #     --base_train_config configs/OpenES/train/brax/ant.yaml \
     #     --experiment_dir experiments/tuned/OpenES/ant
-    mle run configs/tuned.yaml \
-        --purpose OpenES halfcheetah \
-        --base_train_config configs/OpenES/train/brax/halfcheetah.yaml \
-        --experiment_dir experiments/tuned/OpenES/halfcheetah
-    mle run configs/tuned.yaml \
-        --purpose OpenES humanoid \
-        --base_train_config configs/OpenES/train/brax/humanoid.yaml \
-        --experiment_dir experiments/tuned/OpenES/humanoid
+    # mle run configs/tuned.yaml \
+    #     --purpose OpenES halfcheetah \
+    #     --base_train_config configs/OpenES/train/brax/halfcheetah.yaml \
+    #     --experiment_dir experiments/tuned/OpenES/halfcheetah
+    # mle run configs/tuned.yaml \
+    #     --purpose OpenES humanoid \
+    #     --base_train_config configs/OpenES/train/brax/humanoid.yaml \
+    #     --experiment_dir experiments/tuned/OpenES/humanoid
     # mle run configs/tuned.yaml \
     #     --purpose OpenES fetch \
     #     --base_train_config configs/OpenES/train/brax/fetch.yaml \

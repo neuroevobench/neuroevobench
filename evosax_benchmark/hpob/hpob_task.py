@@ -5,7 +5,7 @@ import os
 import xgboost as xgb
 
 
-class HPOBHandler:
+class HPOBTask:
     def __init__(
         self,
         root_dir="hpob-data/",

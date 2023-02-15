@@ -23,6 +23,27 @@ class AtariCNN(nn.Module):
         return x
 
 
+class AtariAllCNN(nn.Module):
+    """DQN-style network with 1x1 conv output (reduces num params)."""
+
+    out_dim: int
+
+    @nn.compact
+    def __call__(self, x):
+        x = nn.relu(nn.Conv(features=32, kernel_size=(8, 8), strides=(4, 4))(x))
+        x = nn.relu(nn.Conv(features=64, kernel_size=(4, 4), strides=(2, 2))(x))
+        x = nn.relu(nn.Conv(features=64, kernel_size=(3, 3), strides=(1, 1))(x))
+        x = nn.Conv(
+            features=self.out_dim,
+            kernel_size=(1, 1),
+            strides=(1, 1),
+            use_bias=False,
+            padding="SAME",
+        )(x)
+        x = nn.avg_pool(x, window_shape=(6, 6), strides=None, padding="VALID")
+        return x
+
+
 class AtariPolicy(object):
     def __init__(
         self, hidden_dims: Sequence[int] = [64], num_actions: int = 10

@@ -21,3 +21,13 @@ python train.py -config configs/<ES>/<problem>.yaml
 ```
 mle run configs/<ES>/search_<problem>.yaml
 ```
+
+### TODOs
+
+- [ ] Write Brax evaluator
+- [ ] Write MinAtar evalutor
+- [ ] Write BBOB evaluator
+- [ ] Write HPOB evaluator
+- [ ] Write MNIST evaluator
+- [ ] Write CIFAR-10 evaluator
+- [ ] Add storage of full ES

@@ -40,16 +40,22 @@ class AtariAllCNN(nn.Module):
             use_bias=False,
             padding="SAME",
         )(x)
-        x = nn.avg_pool(x, window_shape=(6, 6), strides=None, padding="VALID")
-        return x
+        x = nn.avg_pool(x, window_shape=(11, 11), strides=None, padding="VALID")
+        return x.reshape(x.shape[0], x.shape[-1])
 
 
 class AtariPolicy(object):
     def __init__(
-        self, hidden_dims: Sequence[int] = [64], num_actions: int = 10
+        self,
+        hidden_dims: Sequence[int] = [64],
+        num_actions: int = 10,
+        use_all_cnn: bool = False,
     ):
         self.input_dim = [1, 84, 84, 4]
-        self.model = AtariCNN(num_actions, hidden_dims)
+        if use_all_cnn:
+            self.model = AtariAllCNN(num_actions)
+        else:
+            self.model = AtariCNN(num_actions, hidden_dims)
         self.params = self.model.init(
             jax.random.PRNGKey(0), jnp.zeros(self.input_dim)
         )

@@ -1,32 +1,31 @@
-import envpool
+from brax.envs import create
 from evosax import Strategies
-from evosax_benchmark.atari import AtariPolicy
-from evosax_benchmark.atari import AtariTask
-from evosax_benchmark.atari import AtariEvaluator
+from evosax_benchmark.brax import BraxPolicy
+from evosax_benchmark.brax import BraxTask
+from evosax_benchmark.brax import BraxEvaluator
 
 
 def main(config, log):
-    """Running an ES loop on ATARI task."""
+    """Running an ES loop on Brax task."""
     # 1. Create placeholder env to get number of actions for policy init
-    env = envpool.make_gym(config.task_config.env_name, num_envs=1)
-    policy = AtariPolicy(num_actions=env.action_space.n, **config.model_config)
+    env = create(env_name=config.env_name, legacy_spring=True)
+    policy = BraxPolicy(
+        input_dim=env.observation_size,
+        output_dim=env.action_size,
+        hidden_dims=config.model_config.num_hidden_layers
+        * [config.model_config.num_hidden_units],
+    )
 
     # 2. Define train/test task based on configs/eval settings
-    train_task = AtariTask(
-        policy,
-        popsize=config.popsize,
-        **config.train_task_config,
+    train_task = BraxTask(
+        config.env_name, config.task_config.max_steps, test=False
     )
-    test_task = AtariTask(
-        policy,
-        popsize=2,
-        env_name=config.train_task_config.env_name,
-        max_steps=config.train_task_config.max_steps,
-        **config.test_task_config,
+    test_task = BraxTask(
+        config.env_name, config.task_config.max_steps, test=True
     )
 
     # 3. Setup task evaluator with strategy and policy
-    evaluator = AtariEvaluator(
+    evaluator = BraxEvaluator(
         policy=policy,
         train_task=train_task,
         test_task=test_task,
@@ -34,6 +33,7 @@ def main(config, log):
         es_strategy=Strategies[config.strategy_name],
         es_config=config.es_config,
         es_params=config.es_params,
+        num_evals_per_member=config.task_config.num_evals_per_member,
         seed_id=config.seed_id,
     )
 

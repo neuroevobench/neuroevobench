@@ -4,7 +4,7 @@ meta_job_args:
     experiment_type: "hyperparameter-search"
     base_train_fname: "train.py"
     base_train_config: "configs/train.yaml"
-    experiment_dir: "experiments/openes_long"
+    experiment_dir: "experiments/openes"
 
 # Parameters specific to the hyperparameter search
 param_search_args:
@@ -13,7 +13,7 @@ param_search_args:
         aggregate_seeds: "mean"
         problem_type: "best"
         eval_metrics:
-            - "test_eval_perf"
+            - "test_perf"
     search_resources:
         num_search_batches: 1
         num_evals_per_batch: 18
@@ -24,23 +24,16 @@ param_search_args:
         search_params:
           categorical:
             es_config/lrate_init:
+                - 0.001
+                - 0.005
+                - 0.01
+            es_params/sigma_init:
+                - 0.005
                 - 0.01
                 - 0.015
-                # - 0.025
-                # - 0.05
-            es_params/sigma_init:
-                # - 0.001
-                - 0.004
-                - 0.005
-                # - 0.01
-                # - 0.015
             model_config/use_all_cnn:
-                # - true
+                - true
                 - false
-            train_task_config/env_name:
-                - "Pong-v5"
-                - "Breakout-v5"
-                - "Asterix-v5"
 
 # Parameters specific to an individual job
 single_job_args:

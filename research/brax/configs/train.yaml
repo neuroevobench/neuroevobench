@@ -1,22 +1,19 @@
 train_config:
-  num_generations: 5000
-  eval_every_gen: 10
+  num_generations: 2000
+  eval_every_gen: 50
   strategy_name: "OpenES"
-  popsize: 128
-  train_task_config:
-    env_name: "Pong-v5"
+  popsize: 256
+  env_name: "ant"
+  task_config:
     max_steps: 500
-    num_envs_per_member: 2
-  test_task_config:
-    num_envs_per_member: 20
+    num_evals_per_member: 8
   model_config:
-    hidden_dims: [32]
-    use_all_cnn: false
+    num_hidden_layers: 2
+    num_hidden_units: 32
   es_params:
+    sigma_init: 0.05
     init_min: 0.0
     init_max: 0.0
-    sigma_init: 0.01
-    sigma_limit: 0.001
   es_config:
     lrate_init: 0.01
     maximize: true
@@ -37,7 +34,7 @@ log_config:
   use_wandb: true
   wandb_config:
     project: evobench
-    group: atari-env
+    group: atari
     name: seed0
 
 device_config:

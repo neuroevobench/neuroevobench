@@ -3,7 +3,7 @@ train_config:
   eval_every_gen: 50
   strategy_name: "OpenES"
   popsize: 256
-  env_name: "ant"
+  env_name: "Pendulum-v1"
   task_config:
     max_steps: 500
     num_evals_per_member: 8
@@ -34,7 +34,7 @@ log_config:
   use_wandb: true
   wandb_config:
     project: evobench
-    group: brax
+    group: gymnax
     name: seed0
 
 device_config:

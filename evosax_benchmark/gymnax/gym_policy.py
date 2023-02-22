@@ -1,5 +1,5 @@
 """EvoJAX Gym compatible policies."""
-from typing import Sequence, Tuple
+from typing import Sequence, Tuple, Optional
 import jax
 import jax.numpy as jnp
 from flax import linen as nn

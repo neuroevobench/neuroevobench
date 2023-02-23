@@ -31,9 +31,6 @@ param_search_args:
                 - 0.005
                 - 0.01
                 - 0.015
-            model_config/use_all_cnn:
-                - true
-                - false
 
 # Parameters specific to an individual job
 single_job_args:

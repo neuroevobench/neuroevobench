@@ -11,12 +11,20 @@ def main(config, log):
     # 1. Create placeholder env to get number of actions for policy init
     env, _ = gymnax.make(config.env_name)
 
-    if config.env_name in ["Pendulum-v1"]:
+    if config.env_name in ["Pendulum-v1", "MountainCarContinuous-v0"]:
         policy = GymPolicy(
             input_dim=env.obs_shape,
             output_dim=env.num_actions,
             hidden_dims=config.model_config.num_hidden_layers
             * [config.model_config.num_hidden_units],
+        )
+    elif config.env_name in ["CartPole-v1", "MountainCar-v0", "Acrobot-v1"]:
+        policy = GymPolicy(
+            input_dim=env.obs_shape,
+            output_dim=env.num_actions,
+            hidden_dims=config.model_config.num_hidden_layers
+            * [config.model_config.num_hidden_units],
+            output_act_fn="argmax",
         )
     else:
         policy = MinAtarPolicy(

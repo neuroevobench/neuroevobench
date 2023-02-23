@@ -9,6 +9,10 @@ from evojax.util import get_params_format_fn
 from evojax.task.base import TaskState
 
 
+def default_mlp_init(scale=0.05):
+    return nn.initializers.uniform(scale)
+
+
 class MNIST_CNN(nn.Module):
     """CNN for MNIST."""
 

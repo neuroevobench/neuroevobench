@@ -12,14 +12,12 @@ class Evosax2HPO_Wrapper:
         popsize: int,
         es_config: dict = {},
         es_params: dict = {},
-        opt_params: dict = {},
         seed: int = 42,
     ):
         self.evosax_strategy = evosax_strategy
         self.popsize = popsize
         self.es_config = es_config
         self.es_params = es_params
-        self.opt_params = opt_params
         self.rng = jax.random.PRNGKey(seed)
 
     def observe_and_suggest(self, X_obs, y_obs):
@@ -45,7 +43,6 @@ class Evosax2HPO_Wrapper:
             popsize=self.popsize,
             num_dims=num_dims,
             **self.es_config,
-            **self.opt_params
         )
         self.bbo_params = self.strategy.default_params.replace(**self.es_params)
         self.es_state = self.strategy.initialize(rng_init, self.bbo_params)

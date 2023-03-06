@@ -1,0 +1,40 @@
+train_config:
+  num_generations: 2000
+  eval_every_gen: 50
+  strategy_name: "LES"
+  popsize: 256
+  env_name: "ant"
+  task_config:
+    max_steps: 1000
+    num_evals_per_member: 8
+  model_config:
+    num_hidden_layers: 4
+    num_hidden_units: 32
+  es_params:
+    sigma_init: 0.1
+    init_min: 0.0
+    init_max: 0.0
+  es_config:
+    maximize: true
+
+log_config:
+  time_to_track: ["num_gens"]
+  what_to_track: 
+    - "mean_pop_perf"
+    - "max_pop_perf"
+    - "best_pop_perf"
+    - "test_eval_perf"
+    - "best_eval_perf"
+  verbose: true
+  print_every_k_updates: 1
+  overwrite: 1
+  model_type: "jax"
+  use_wandb: true
+  wandb_config:
+    project: evobench
+    group: les_v1
+    name: seed0
+
+device_config:
+  device_type: "gpu"
+  num_devices: 1

@@ -1,4 +1,4 @@
-# Benchmark Utilities for `evosax` Strategies 🦕 🦖 🐢
+# `NeuroEvoBench`: A Benchmark for Neuroevolution Methods 🦕 🦖 🐢
 
 This repository contains benchmark results, helper scripts, ES configurations and logs for testing the performance of evolutionary strategies in [`evosax`](https://github.com/RobertTLange/evosax/).
 

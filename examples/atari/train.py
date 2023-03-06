@@ -1,8 +1,8 @@
 import envpool
 from evosax import Strategies
-from evosax_benchmark.atari import AtariPolicy
-from evosax_benchmark.atari import AtariTask
-from evosax_benchmark.atari import AtariEvaluator
+from neuroevobench.problems.atari import AtariPolicy
+from neuroevobench.problems.atari import AtariTask
+from neuroevobench.problems.atari import AtariEvaluator
 
 
 def main(config, log):

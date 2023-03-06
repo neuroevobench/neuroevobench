@@ -1,5 +1,5 @@
 from evosax import Strategies
-from evosax_benchmark.bbob import BBOBEvaluator
+from neuroevobench.problems.bbob import BBOBEvaluator
 
 
 def main(config, log):

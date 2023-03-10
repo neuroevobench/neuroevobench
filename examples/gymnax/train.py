@@ -1,9 +1,9 @@
 import gymnax
 from gymnax.utils.evojax_wrapper import GymnaxTask
 from evosax import Strategies
-from evosax_benchmark.gymnax import GymPolicy
-from evosax_benchmark.gymnax import MinAtarPolicy
-from evosax_benchmark.gymnax import GymnaxEvaluator
+from neuroevobench.problems.gymnax import GymPolicy
+from neuroevobench.problems.gymnax import MinAtarPolicy
+from neuroevobench.problems.gymnax import GymnaxEvaluator
 
 
 def main(config, log):

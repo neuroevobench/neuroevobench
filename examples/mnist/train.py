@@ -1,7 +1,7 @@
 from evosax import Strategies
-from evosax_benchmark.mnist import MNISTPolicy
-from evosax_benchmark.mnist import MNISTTask
-from evosax_benchmark.mnist import MNISTEvaluator
+from neuroevobench.problems.mnist import MNISTPolicy
+from neuroevobench.problems.mnist import MNISTTask
+from neuroevobench.problems.mnist import MNISTEvaluator
 
 
 def main(config, log):

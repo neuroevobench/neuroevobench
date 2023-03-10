@@ -1,6 +1,5 @@
-import numpy as np
 from evosax import Strategies
-from evosax_benchmark.hpob import HPOBEvaluator
+from neuroevobench.problems.hpob import HPOBEvaluator
 
 
 def main(config, log):

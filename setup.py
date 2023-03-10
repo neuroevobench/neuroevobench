@@ -10,7 +10,7 @@ from typing import List
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(CURRENT_DIR, "README.md"), encoding="utf-8") as f:
+with open(os.path.join(CURRENT_DIR, "Readme.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 

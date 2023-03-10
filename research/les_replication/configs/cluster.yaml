@@ -4,7 +4,7 @@ meta_job_args:
     experiment_type: "hyperparameter-search"
     base_train_fname: "train.py"
     base_train_config: "configs/train.yaml"
-    experiment_dir: "experiments/les_v2"
+    experiment_dir: "experiments/les_v5_full"
 
 # Parameters specific to the hyperparameter search
 param_search_args:
@@ -17,7 +17,7 @@ param_search_args:
     search_resources:
         num_search_batches: 1
         num_evals_per_batch: 9
-        num_seeds_per_eval: 4
+        num_seeds_per_eval: 3
     search_config:
         search_type: "Grid"
         search_schedule: "sync"
@@ -25,14 +25,14 @@ param_search_args:
           categorical:
             env_name:
                 - "ant"
-                # - "fetch"
-                # - "grasp"
-                # - "halfcheetah"
-                # - "hopper"
-                # - "humanoid"
-                # - "reacher"
+                - "fetch"
+                - "grasp"
+                - "halfcheetah"
+                - "hopper"
+                - "humanoid"
+                - "reacher"
                 - "ur5e"
-                # - "walker2d"
+                - "walker2d"
 
 # Parameters specific to an individual job
 single_job_args:
@@ -41,13 +41,13 @@ single_job_args:
     num_logical_cores: 4
     log_file: "log"
     err_file: "err"
-    # env_name: "es_jax"
-    # memory_per_cpu: 10000
-    # time_per_job: "00:04:00"
-    # partition:
-    #     - "ex_scioi_gpu"
-    # gpu_type: null
-    env_name: "snippets"    
-    gpu_prefix: "cuda"
-    queue:
-        - "cognition-all.q"
+    env_name: "es_jax"
+    memory_per_cpu: 10000
+    time_per_job: "00:04:00"
+    partition:
+        - "ex_scioi_gpu"
+    gpu_type: null
+    # env_name: "snippets"    
+    # gpu_prefix: "cuda"
+    # queue:
+    #     - "cognition-all.q"

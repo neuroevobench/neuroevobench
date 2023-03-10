@@ -1,4 +1,4 @@
-# `NeuroEvoBench`: A Benchmark for Neuroevolution Methods 🦕 🦖 🐢
+# `NeuroEvoBench`: Benchmarking Neuroevolution 🦕 🦖 🐢
 
 This repository contains benchmark results, helper scripts, ES configurations and logs for testing the performance of evolutionary strategies in [`evosax`](https://github.com/RobertTLange/evosax/).
 
@@ -24,10 +24,6 @@ mle run configs/<ES>/search_<problem>.yaml
 
 ### TODOs
 
-- [ ] Write Brax evaluator
-- [ ] Write MinAtar evalutor
-- [ ] Write BBOB evaluator
-- [ ] Write HPOB evaluator
-- [ ] Write MNIST evaluator
+- [ ] Add rliable metrics
 - [ ] Write CIFAR-10 evaluator
-- [ ] Add storage of full ES
+- [ ] Add storage of full ES state

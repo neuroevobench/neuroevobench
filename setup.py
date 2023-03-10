@@ -43,7 +43,7 @@ requires = [
     "brax",
     "tensorflow",
     "tensorflow_datasets",
-    "mle-toolbox[full]==0.3.4",
+    # "mle-toolbox[full]==0.3.4",
     "xgboost",
 ]
 

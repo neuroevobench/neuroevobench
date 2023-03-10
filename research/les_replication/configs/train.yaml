@@ -32,7 +32,7 @@ log_config:
   use_wandb: true
   wandb_config:
     project: evobench
-    group: les_v1
+    group: les_v5_full
     name: seed0
 
 device_config:

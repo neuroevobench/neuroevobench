@@ -52,7 +52,7 @@ class SMNISTTask(object):
         return -1 * loss, perf
 
     def rollout_single(
-        self, network_params: chex.ArrayTree, X_single: chex.ArrayTree
+        self, network_params: chex.ArrayTree, X_single: chex.Array
     ):
         """Rollout RNN on a single sequence."""
         # Reset the network hidden state at beginning of sequence

@@ -2,12 +2,11 @@ train_config:
   num_generations: 5000
   eval_every_gen: 100
   strategy_name: "Sep_CMA_ES"
-  popsize: 512
+  popsize: 64
   model_config:
     num_hidden_units: 48
   task_config:
-    batch_size: 512
-    permute_seq: False
+    batch_size: 128
   es_config:
     elite_ratio: 0.5
   es_params:

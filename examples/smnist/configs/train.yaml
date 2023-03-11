@@ -1,0 +1,38 @@
+train_config:
+  num_generations: 5000
+  eval_every_gen: 100
+  strategy_name: "Sep_CMA_ES"
+  popsize: 256
+  model_config:
+    num_hidden_units: 48
+  task_config:
+    batch_size: 512
+    permute_seq: False
+  es_config:
+    elite_ratio: 0.5
+  es_params:
+    sigma_init: 0.1
+    init_min: 0.0
+    init_max: 0.0
+
+log_config:
+  time_to_track: ["num_gens"]
+  what_to_track:
+    - "mean_pop_perf"
+    - "max_pop_perf"
+    - "best_pop_perf"
+    - "test_eval_perf"
+    - "best_eval_perf"
+  verbose: true
+  print_every_k_updates: 1
+  overwrite: 1
+  model_type: "jax"
+  use_wandb: true
+  wandb_config:
+    project: evo-bench
+    group: smnist
+    name: seed0
+
+device_config:
+  device_type: "gpu"
+  num_devices: 1

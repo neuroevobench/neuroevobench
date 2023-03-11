@@ -21,6 +21,7 @@ class GymnaxEvaluator(object):
         self.policy = policy
         self.es_strategy = es_strategy
         self.es_config = es_config
+        self.es_config["maximize"] = True
         self.es_params = es_params
         self.train_task = train_task
         self.test_task = test_task
@@ -30,12 +31,6 @@ class GymnaxEvaluator(object):
 
     def setup(self):
         """Initialize task, strategy & policy"""
-        self.strategy = self.es_strategy(
-            popsize=self.popsize,
-            num_dims=self.policy.num_params,
-            maximize=True,
-            **self.es_config,
-        )
         self.strategy = Evosax2JAX_Wrapper(
             self.es_strategy,
             param_size=self.policy.num_params,

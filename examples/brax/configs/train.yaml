@@ -16,7 +16,6 @@ train_config:
     init_max: 0.0
   es_config:
     lrate_init: 0.01
-    maximize: true
     centered_rank: true
 
 log_config:

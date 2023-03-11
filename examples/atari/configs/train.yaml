@@ -19,7 +19,6 @@ train_config:
     sigma_limit: 0.001
   es_config:
     lrate_init: 0.01
-    maximize: true
     centered_rank: true
 
 log_config:

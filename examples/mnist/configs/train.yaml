@@ -17,11 +17,14 @@ train_config:
     init_min: 0.0
     init_max: 0.0
 
-
-
 log_config:
   time_to_track: ["num_gens"]
-  what_to_track: ["train_perf", "test_perf"]
+  what_to_track:
+    - "mean_pop_perf"
+    - "max_pop_perf"
+    - "best_pop_perf"
+    - "test_eval_perf"
+    - "best_eval_perf"
   verbose: true
   print_every_k_updates: 1
   overwrite: 1

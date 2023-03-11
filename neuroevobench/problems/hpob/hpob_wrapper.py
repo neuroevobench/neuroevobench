@@ -42,6 +42,7 @@ class Evosax2HPO_Wrapper:
         self.strategy = self.evosax_strategy(
             popsize=self.popsize,
             num_dims=num_dims,
+            maximize=True,
             **self.es_config,
         )
         self.bbo_params = self.strategy.default_params.replace(**self.es_params)

@@ -42,7 +42,7 @@ class HPOBEvaluator(object):
             # Loop over all mean results and return performance
             for g in range(mean_perf.shape[0]):
                 log.update(
-                    {"num_gens": g, "num_evals": mean_steps[g]},
+                    {"num_gens": g + 1, "num_evals": mean_steps[g]},
                     {"test_perf": mean_perf[g]},
                     save=True,
                 )

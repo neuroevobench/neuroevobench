@@ -33,6 +33,7 @@ class MNISTEvaluator(object):
         self.strategy = self.es_strategy(
             popsize=self.popsize,
             num_dims=self.policy.num_params,
+            maximize=True,
             **self.es_config,
         )
         self.strategy = Evosax2JAX_Wrapper(
@@ -55,7 +56,7 @@ class MNISTEvaluator(object):
             seed=self.seed_id,
             obs_normalizer=self.obs_normalizer,
             pop_size=self.popsize,
-            use_for_loop=False,
+            use_for_loop=True,
             n_repeats=1,
             test_n_repeats=1,
             n_evaluations=1,
@@ -66,7 +67,8 @@ class MNISTEvaluator(object):
         print(f"START EVOLVING {self.policy.num_params} PARAMETERS.")
         best_return = -jnp.finfo(jnp.float32).max
 
-        for gen_counter in range(num_generations):
+        # Run evolution loop for number of generations
+        for gen_counter in range(1, num_generations + 1):
             params = self.strategy.ask()
             fit_re, _ = self.sim_mgr.eval_params(params=params, test=False)
             self.strategy.tell(fitness=fit_re)
@@ -86,7 +88,7 @@ class MNISTEvaluator(object):
                 best_rewards, _ = self.sim_mgr.eval_params(
                     params=eval_params[1], test=True
                 )
-                time_tic = {"num_gens": gen_counter + 1}
+                time_tic = {"num_gens": gen_counter}
                 stats_tic = {
                     "mean_pop_perf": float(fit_re.mean()),
                     "max_pop_perf": float(fit_re.max()),

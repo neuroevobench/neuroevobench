@@ -33,6 +33,7 @@ class GymnaxEvaluator(object):
         self.strategy = self.es_strategy(
             popsize=self.popsize,
             num_dims=self.policy.num_params,
+            maximize=True,
             **self.es_config,
         )
         self.strategy = Evosax2JAX_Wrapper(
@@ -66,7 +67,7 @@ class GymnaxEvaluator(object):
         print(f"START EVOLVING {self.policy.num_params} PARAMETERS.")
         best_return = -jnp.finfo(jnp.float32).max
 
-        for gen_counter in range(num_generations):
+        for gen_counter in range(1, num_generations + 1):
             params = self.strategy.ask()
             fit_re, _ = self.sim_mgr.eval_params(params=params, test=False)
             self.strategy.tell(fitness=fit_re)
@@ -86,7 +87,7 @@ class GymnaxEvaluator(object):
                 best_rewards, _ = self.sim_mgr.eval_params(
                     params=eval_params[1], test=True
                 )
-                time_tic = {"num_gens": gen_counter + 1}
+                time_tic = {"num_gens": gen_counter}
                 stats_tic = {
                     "mean_pop_perf": float(fit_re.mean()),
                     "max_pop_perf": float(fit_re.max()),

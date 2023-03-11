@@ -1,3 +1,4 @@
+from typing import List
 import jax
 from evosax.problems import BBOBFitness
 
@@ -43,6 +44,7 @@ class BBOBEvaluator(object):
         es_config={},
         es_params={},
         num_eval_runs: int = 50,
+        fct_to_eval: List[str] = bbob_fns,
         seed_id: int = 0,
     ):
         self.popsize = popsize
@@ -51,6 +53,7 @@ class BBOBEvaluator(object):
         self.es_config = es_config
         self.es_params = es_params
         self.num_eval_runs = num_eval_runs
+        self.fct_to_eval = fct_to_eval
         self.seed_id = seed_id
         self.setup()
 
@@ -59,6 +62,7 @@ class BBOBEvaluator(object):
         self.strategy = self.es_strategy(
             popsize=self.popsize,
             num_dims=self.num_dims,
+            maximize=False,
             **self.es_config,
         )
         self.es_params = self.strategy.default_params.replace(**self.es_params)
@@ -72,6 +76,7 @@ class BBOBEvaluator(object):
             num_generations,
             self.num_eval_runs,
             self.es_params,
+            self.fct_to_eval,
             self.seed_id,
         )
         if log is not None:
@@ -90,12 +95,13 @@ def eval_bbob_sweep(
     num_gens: int,
     num_evals: int,
     es_params,
+    fct_to_eval: List[str],
     seed_id: int,
 ):
     """Runs BBO evaluation on all BBOB tasks."""
     fn_mean, fn_best = {}, {}
     rng = jax.random.PRNGKey(seed_id)
-    for fn in bbob_fns:
+    for fn in fct_to_eval:
         rng, rng_fn = jax.random.split(rng)
         evaluator = BBOBFitness(fn, num_dims)
 

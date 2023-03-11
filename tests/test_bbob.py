@@ -18,6 +18,7 @@ def test_bbob():
             "init_max": 5.0,
         },
         num_eval_runs=2,
+        fct_to_eval=["Sphere"],
         seed_id=0,
     )
 

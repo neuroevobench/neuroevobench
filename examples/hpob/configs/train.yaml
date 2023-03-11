@@ -4,7 +4,6 @@ train_config:
   popsize: 4
   es_config:
     elite_ratio: 0.5
-    maximize: true
   es_params:
     sigma_init: 0.15
     init_min: 0.5

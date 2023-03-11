@@ -29,6 +29,7 @@ class AtariEvaluator(object):
         self.strategy = self.es_strategy(
             popsize=self.popsize,
             num_dims=self.train_task.num_dims,
+            maximize=True,
             **self.es_config,
         )
         self.es_params = self.strategy.default_params.replace(**self.es_params)
@@ -41,7 +42,7 @@ class AtariEvaluator(object):
         es_state = self.strategy.initialize(rng, self.es_params)
         best_return = -jnp.finfo(jnp.float32).max
 
-        for gen_counter in range(num_generations):
+        for gen_counter in range(1, num_generations + 1):
             rng, rng_ask = jax.random.split(rng)
             params, es_state = self.strategy.ask(
                 rng_ask, es_state, self.es_params
@@ -62,7 +63,7 @@ class AtariEvaluator(object):
                     ]
                 ).squeeze()
                 eval_rewards = self.test_task.evaluate(eval_params).mean(axis=1)
-                time_tic = {"num_gens": gen_counter + 1}
+                time_tic = {"num_gens": gen_counter}
                 stats_tic = {
                     "mean_pop_perf": float(fit_re.mean()),
                     "max_pop_perf": float(fit_re.max()),

@@ -1,0 +1,19 @@
+real:
+  sigma_init:
+    begin: 0.001
+    end: 0.15
+    prior: "uniform"
+categorical:
+  centered_rank:
+    - false
+  temperature:
+    - 0.0
+    - 10
+    - 12.5
+    - 15
+    - 17.5
+    - 20.0
+    - 22.5
+    - 25
+    - 27.5
+    - 30

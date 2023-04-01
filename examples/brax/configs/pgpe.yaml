@@ -1,7 +1,7 @@
 train_config:
-  num_generations: 2000
-  eval_every_gen: 50
-  strategy_name: "OpenES"
+  num_generations: 300
+  eval_every_gen: 10
+  strategy_name: "PGPE"
   popsize: 1024
   env_name: "ant"
   task_config:
@@ -11,7 +11,8 @@ train_config:
     num_hidden_layers: 4
     num_hidden_units: 32
   es_params:
-    sigma_init: 0.05
+    sigma_init: 0.04
+    sigma_lrate: 0.07
     init_min: 0.0
     init_max: 0.0
   es_config:

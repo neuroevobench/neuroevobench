@@ -83,7 +83,7 @@ def get_svhn_data(batch_size: int, test: bool = False):
     train_ds, val_ds = random_split(dataset, [train_size, val_size])
     if test:
         return torch.utils.data.DataLoader(
-            val_ds, 12000, num_workers=4, pin_memory=False
+            val_ds, batch_size, num_workers=4, pin_memory=False
         )
     else:
         return torch.utils.data.DataLoader(

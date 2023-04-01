@@ -11,7 +11,7 @@ def main(config, log):
 
     # 2. Define train/test task based on configs/eval settings
     train_task = SVHNTask(config.task_config.batch_size, test=False)
-    test_task = SVHNTask(10000, test=True)
+    test_task = SVHNTask(12000, test=True)
 
     # 3. Setup task evaluator with strategy and policy
     evaluator = SVHNEvaluator(

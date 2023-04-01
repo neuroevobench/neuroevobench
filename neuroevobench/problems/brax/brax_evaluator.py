@@ -1,3 +1,5 @@
+from typing import Tuple, Optional, Any
+import chex
 import jax.numpy as jnp
 from evojax.obs_norm import ObsNormalizer
 from evojax.sim_mgr import SimManager
@@ -16,6 +18,8 @@ class BraxEvaluator(object):
         es_params={},
         num_evals_per_member: int = 8,
         seed_id: int = 0,
+        log: Optional[Any] = None,
+        iter_id: Optional[int] = None,
     ):
         self.popsize = popsize
         self.policy = policy
@@ -27,6 +31,8 @@ class BraxEvaluator(object):
         self.test_task = test_task
         self.num_evals_per_member = num_evals_per_member
         self.seed_id = seed_id
+        self.log = log
+        self.iter_id = iter_id
         self.setup()
 
     def setup(self):
@@ -57,40 +63,77 @@ class BraxEvaluator(object):
             n_evaluations=128,
         )
 
-    def run(self, num_generations, eval_every_gen=10, log=None):
+    def run(self, num_generations: int = 2000, eval_every_gen=50):
         """Run evolution loop with logging."""
         print(f"START EVOLVING {self.policy.num_params} PARAMETERS.")
-        best_return = -jnp.finfo(jnp.float32).max
+        # Run very first evaluation
+        mean_es_returns, best_member_returns = self.evaluate(
+            self.strategy.es_state
+        )
+        time_tic = {"num_gens": 0}
+        stats_tic = {
+            "test_eval_perf": float(mean_es_returns),
+            "best_eval_perf": float(best_member_returns),
+        }
+        self.update_log(time_tic, stats_tic)
+        best_return = best_member_returns
 
+        # Run evolution loop
         for gen_counter in range(1, num_generations + 1):
             params = self.strategy.ask()
-            fit_re, _ = self.sim_mgr.eval_params(params=params, test=False)
-            self.strategy.tell(fitness=fit_re)
-            improved = best_return < fit_re.max()
-            best_return = best_return * (1 - improved) + fit_re.max() * improved
+            fitness, _ = self.sim_mgr.eval_params(params=params, test=False)
+            self.strategy.tell(fitness=fitness)
+            improved = best_return < fitness.max()
+            best_return = (
+                best_return * (1 - improved) + fitness.max() * improved
+            )
 
             if gen_counter % eval_every_gen == 0:
-                eval_params = jnp.stack(
-                    [
-                        self.strategy.es_state.mean.reshape(-1, 1),
-                        self.strategy.es_state.best_member.reshape(-1, 1),
-                    ]
-                ).squeeze()
-                mean_rewards, _ = self.sim_mgr.eval_params(
-                    params=eval_params[0], test=True
-                )
-                best_rewards, _ = self.sim_mgr.eval_params(
-                    params=eval_params[1], test=True
+                mean_es_returns, best_member_returns = self.evaluate(
+                    self.strategy.es_state
                 )
                 time_tic = {"num_gens": gen_counter}
+                if self.iter_id is not None:
+                    time_tic["iter_id"] = self.iter_id
                 stats_tic = {
-                    "mean_pop_perf": float(fit_re.mean()),
-                    "max_pop_perf": float(fit_re.max()),
+                    "mean_pop_perf": float(fitness.mean()),
+                    "max_pop_perf": float(fitness.max()),
                     "best_pop_perf": float(best_return),
-                    "test_eval_perf": float(mean_rewards.mean()),
-                    "best_eval_perf": float(best_rewards.mean()),
+                    "test_eval_perf": float(mean_es_returns),
+                    "best_eval_perf": float(best_member_returns),
                 }
-                if log is not None:
-                    log.update(time_tic, stats_tic, save=True)
-                else:
-                    print(time_tic, stats_tic)
+                self.update_log(time_tic, stats_tic)
+
+    def evaluate(self, es_state) -> Tuple[chex.Array, chex.Array]:
+        """Evaluate mean and best_member of test task."""
+        eval_params = jnp.stack(
+            [
+                es_state.mean.reshape(-1, 1),
+                es_state.best_member.reshape(-1, 1),
+            ]
+        ).squeeze()
+        mean_return, _ = self.sim_mgr.eval_params(
+            params=eval_params[0], test=True
+        )
+        best_return, _ = self.sim_mgr.eval_params(
+            params=eval_params[1], test=True
+        )
+        return mean_return.mean(), best_return.mean()
+
+    def update_log(self, time_tic, stats_tic, model: Optional[Any] = None):
+        """Update logger with newest data."""
+        if self.log is not None:
+            self.log.update(time_tic, stats_tic, save=True)
+        else:
+            print(time_tic, stats_tic)
+
+    @property
+    def fitness_eval(self):
+        """Get latest fitness evaluation score."""
+        # TODO(Robert): Hack to get the latest fitness score - CSVLogger?
+        return self.log.stats_log.stats_tracked["test_eval_perf"][-1]
+
+    @property
+    def solution_eval(self):
+        """Get latest solution parameters."""
+        return self.strategy.solution

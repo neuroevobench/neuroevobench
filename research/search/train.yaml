@@ -1,25 +1,29 @@
 train_config:
   num_generations: 2000
   eval_every_gen: 50
-  strategy_name: "OpenES"
-  popsize: 1024
+  strategy_name: "SNES"
+  popsize: 512
   env_name: "ant"
   task_config:
-    max_steps: 1000
+    max_steps: 500
     num_evals_per_member: 1
   model_config:
     num_hidden_layers: 4
     num_hidden_units: 32
   es_params:
-    sigma_init: 0.05
     init_min: 0.0
     init_max: 0.0
   es_config:
-    lrate_init: 0.01
-    centered_rank: true
+    sigma_init: 0.05
+  num_hyper_search_iters: 50
+  search_config:
+    refine_after: 40
+    refine_top_k: 10
 
 log_config:
-  time_to_track: ["num_gens"]
+  time_to_track:
+    - "search_iter" 
+    - "num_gens"
   what_to_track: 
     - "mean_pop_perf"
     - "max_pop_perf"
@@ -32,7 +36,7 @@ log_config:
   model_type: "jax"
   use_wandb: true
   wandb_config:
-    project: evobench
+    project: neb
     group: brax
     name: seed0
 

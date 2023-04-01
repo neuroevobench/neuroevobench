@@ -1,3 +1,4 @@
+from typing import Optional, Any
 import jax
 import jax.numpy as jnp
 
@@ -13,6 +14,7 @@ class AtariEvaluator(object):
         es_config={},
         es_params={},
         seed_id: int = 0,
+        log: Optional[Any] = None,
     ):
         self.popsize = popsize
         self.policy = policy
@@ -22,6 +24,7 @@ class AtariEvaluator(object):
         self.train_task = train_task
         self.test_task = test_task
         self.seed_id = seed_id
+        self.log = log
         self.setup()
 
     def setup(self):
@@ -34,7 +37,7 @@ class AtariEvaluator(object):
         )
         self.es_params = self.strategy.default_params.replace(**self.es_params)
 
-    def run(self, num_generations, eval_every_gen=10, log=None):
+    def run(self, num_generations: int = 5000, eval_every_gen: int = 50):
         """Run evolution loop with logging."""
         print(f"START EVOLVING {self.train_task.num_dims} PARAMETERS.")
 

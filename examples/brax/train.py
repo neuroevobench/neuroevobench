@@ -35,19 +35,23 @@ def main(config, log):
         es_params=config.es_params,
         num_evals_per_member=config.task_config.num_evals_per_member,
         seed_id=config.seed_id,
-    )
-
-    # 4. Run the ES loop with logging
-    evaluator.run(
-        config.num_generations,
-        config.eval_every_gen,
         log=log,
     )
 
+    # 4. Run the ES loop with logging
+    evaluator.run(config.num_generations, config.eval_every_gen)
+
 
 if __name__ == "__main__":
-    from mle_toolbox import MLExperiment
+    # Attempt running experiment using mle-infrastructure
+    # try:
+    #     from mle_toolbox import MLExperiment
 
-    # Setup experiment run (visible GPUs for JAX parallelism)
-    mle = MLExperiment(config_fname="configs/train.yaml")
-    main(mle.train_config, mle.log)
+    #     mle = MLExperiment(config_fname="configs/train.yaml")
+    #     main(mle.train_config, mle.log)
+    # # mle-infrastructure is not supported - use default utilities
+    # except Exception:
+    from neuroevobench.utils import CSV_Logger, load_config
+
+    train_config = load_config()
+    main(train_config, CSV_Logger("temp/"))

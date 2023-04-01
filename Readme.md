@@ -27,3 +27,8 @@ mle run configs/<ES>/search_<problem>.yaml
 - [ ] Add rliable metrics
 - [ ] Write CIFAR-10 evaluator
 - [ ] Add storage of full ES state
+- [ ] Add mle-hyperopt search and configurations for search
+- [ ] Run first brax search (500 Steps)
+
+- [ ] Add iter_id to all evaluators -> write general abstraction
+- [ ] Add fitness/solution retrieval to all evaluators

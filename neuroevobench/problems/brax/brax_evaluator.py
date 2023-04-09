@@ -71,6 +71,8 @@ class BraxEvaluator(object):
             self.strategy.es_state
         )
         time_tic = {"num_gens": 0}
+        if self.iter_id is not None:
+            time_tic["iter_id"] = self.iter_id
         stats_tic = {
             "test_eval_perf": float(mean_es_returns),
             "best_eval_perf": float(best_member_returns),

@@ -10,6 +10,7 @@ train_config:
   model_config:
     num_hidden_layers: 4
     num_hidden_units: 32
+    output_act_fn: swish
   es_params:
     init_min: 0.0
     init_max: 0.0

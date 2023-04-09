@@ -1,3 +1,3 @@
-from .hyperspace import HyperSpace
+from .hyper import HyperParams, HyperSpace
 
-__all__ = ["HyperSpace"]
+__all__ = ["HyperSpace", "HyperParams"]

@@ -15,7 +15,7 @@ def search(mle, config, log):
     # Setup the strategy search space for sequential evaluation
     hyperspace = HyperSpace(config.strategy_name, "brax")
     hyper_strategy = RandomSearch(
-        **hyperspace.space_dict,
+        **hyperspace.space,
         search_config=config.search_config,
         maximize_objective=True,
         seed_id=config.seed_id,

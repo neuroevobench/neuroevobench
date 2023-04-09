@@ -16,17 +16,22 @@ def default_mlp_init(scale=0.05):
 class BraxMLP(nn.Module):
     feat_dims: Sequence[int]
     out_dim: int
+    hidden_fn: str
     out_fn: str
 
     @nn.compact
     def __call__(self, x):
         for hidden_dim in self.feat_dims:
-            x = nn.tanh(
-                nn.Dense(
-                    hidden_dim,
-                    bias_init=default_mlp_init(),
-                )(x)
-            )
+            x = nn.Dense(
+                hidden_dim,
+                bias_init=default_mlp_init(),
+            )(x)
+            if self.hidden_fn == "tanh":
+                x = nn.tanh(x)
+            elif self.hidden_fn == "relu":
+                x = nn.relu(x)
+            elif self.hidden_fn == "swish":
+                x = nn.swish(x)
         x = nn.Dense(
             self.out_dim,
             bias_init=default_mlp_init(),
@@ -50,11 +55,15 @@ class BraxPolicy(PolicyNetwork):
         input_dim: int,
         hidden_dims: Sequence[int],
         output_dim: int,
+        hidden_act_fn: str = "tanh",
         output_act_fn: str = "tanh",
     ):
         self.input_dim = [1, input_dim]
         self.model = BraxMLP(
-            feat_dims=hidden_dims, out_dim=output_dim, out_fn=output_act_fn
+            feat_dims=hidden_dims,
+            out_dim=output_dim,
+            hidden_fn=hidden_act_fn,
+            out_fn=output_act_fn,
         )
         self.params = self.model.init(
             jax.random.PRNGKey(0), jnp.ones(self.input_dim)

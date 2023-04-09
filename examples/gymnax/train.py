@@ -1,5 +1,5 @@
 import gymnax
-from gymnax.utils.evojax_wrapper import GymnaxTask
+from gymnax.wrappers.evojax import GymnaxToEvoJaxTask
 from evosax import Strategies
 from neuroevobench.problems.gymnax import GymPolicy
 from neuroevobench.problems.gymnax import MinAtarPolicy
@@ -35,10 +35,10 @@ def main(config, log):
         )
 
     # 2. Define train/test task based on configs/eval settings
-    train_task = GymnaxTask(
+    train_task = GymnaxToEvoJaxTask(
         config.env_name, config.task_config.max_steps, test=False
     )
-    test_task = GymnaxTask(
+    test_task = GymnaxToEvoJaxTask(
         config.env_name, config.task_config.max_steps, test=True
     )
 

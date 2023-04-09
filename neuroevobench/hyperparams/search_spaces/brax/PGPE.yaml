@@ -10,3 +10,7 @@ real:
 categorical:
   centered_rank:
     - true
+  lrate_decay:
+    - 0.999
+  sigma_decay:
+    - 0.999

@@ -4,7 +4,7 @@ meta_job_args:
     experiment_type: "hyperparameter-search"
     base_train_fname: "run.py"
     base_train_config: "train.yaml"
-    experiment_dir: "experiments/brax"
+    experiment_dir: "experiments/brax_swish"
 
 # Parameters specific to the hyperparameter search
 param_search_args:
@@ -13,10 +13,10 @@ param_search_args:
         aggregate_seeds: "mean"
         problem_type: "best"
         eval_metrics:
-            - "test_perf"
+            - "test_eval_perf"
     search_resources:
         num_search_batches: 1
-        num_evals_per_batch: 16
+        num_evals_per_batch: 20
         num_seeds_per_eval: 1
     search_config:
         search_type: "Grid"
@@ -33,12 +33,13 @@ param_search_args:
                 - SNES
                 - PGPE
                 - Sep_CMA_ES
+                - ARS
 
 # Parameters specific to an individual job
 single_job_args:
     job_name: "es_bench"
     num_gpus: 1
-    num_logical_cores: 16
+    num_logical_cores: 4
     log_file: "log"
     err_file: "err"
     env_name: "es_jax"

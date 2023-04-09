@@ -9,7 +9,7 @@ real:
     prior: "uniform"
 categorical:
   centered_rank:
-    - true
+    - false
   lrate_decay:
     - 0.999
   sigma_decay:

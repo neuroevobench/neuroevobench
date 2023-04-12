@@ -1,10 +1,10 @@
 """Trains an ant to run in the +x direction."""
 
-import brax
-from brax import jumpy as jp
-from brax.envs import env
-from brax.envs import env
-from brax.envs import wrappers
+import brax.v1 as brax
+from brax.v1 import jumpy as jp
+from brax.v1.envs import env
+from brax.v1.envs import env
+from brax.v1.envs import wrappers
 from typing import Optional
 
 

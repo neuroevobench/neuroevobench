@@ -4,7 +4,7 @@ meta_job_args:
     experiment_type: "hyperparameter-search"
     base_train_fname: "run.py"
     base_train_config: "train.yaml"
-    experiment_dir: "experiments/brax_swish"
+    experiment_dir: "experiments/brax_fd"
 
 # Parameters specific to the hyperparameter search
 param_search_args:
@@ -26,14 +26,17 @@ param_search_args:
             env_name:
                 - ant
                 - fetch
-                - halfcheetah
-                - humanoid
             strategy_name:
                 - OpenES
-                - SNES
                 - PGPE
-                - Sep_CMA_ES
                 - ARS
+                - SNES
+                - Sep_CMA_ES
+                - LES
+                - SimpleGA
+                - SAMR_GA
+                - GESMR_GA
+                - LGA
 
 # Parameters specific to an individual job
 single_job_args:

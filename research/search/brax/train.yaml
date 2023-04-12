@@ -1,9 +1,10 @@
 train_config:
   num_generations: 2000
   eval_every_gen: 50
-  strategy_name: "SNES"
+  strategy_name: SNES
   popsize: 512
-  env_name: "ant"
+  problem_type: brax
+  env_name: ant
   task_config:
     max_steps: 500
     num_evals_per_member: 1

@@ -8,8 +8,14 @@ real:
     end: 0.05
     prior: "uniform"
 categorical:
-  centered_rank:
-    - false
+  opt_name:
+    - adam
+    - sgd
+    - clipup
+  fitness_trafo:
+    - centered_rank
+    - z_score
+    - raw
   lrate_decay:
     - 0.999
   sigma_decay:

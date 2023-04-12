@@ -42,18 +42,20 @@ def filter_log(
     search_log = yaml_log_to_pd(search_fname)
 
     # Loop over all evals and find the best one
-    best_score, best_s_id, best_lcurve, best_time = -10e10, -1, None, None
+    best_score, max_scores = -10e10, []
     for i in range(num_search_iters):
         run_ids = np.arange(
             i * (num_inner_updates + 1), (i + 1) * (num_inner_updates + 1)
         )
         sub_log = log[run_ids]
         time = meta_log[run_id].time.num_gens[run_ids]
-        if sub_log.max() > best_score:
+        max_score_run = sub_log.max()
+        if max_score_run > best_score:
             best_score = sub_log.max()
             best_s_id = i
             best_lcurve = sub_log
             best_time = time
+        max_scores.append(max_score_run)
 
     # Get the best hyperparameters
     best_hypers = search_log[search_log["eval_id"] == best_s_id]["params"].iloc[
@@ -64,5 +66,6 @@ def filter_log(
         "s_id": best_s_id,
         "lcurve": best_lcurve,
         "hypers": best_hypers,
+        "max_scores": np.array(max_scores),
         "time": best_time,
     }

@@ -10,8 +10,8 @@ from evojax.task.base import VectorizedTask
 from evojax.task.base import TaskState
 
 try:
-    from brax.envs import create
-    from brax.envs import State as BraxState
+    from brax.v1.envs import create
+    from brax.v1.envs import State as BraxState
 except ModuleNotFoundError:
     print("You need to install brax for Brax tasks:")
     print("  pip install git+https://github.com/google/brax.git@main")

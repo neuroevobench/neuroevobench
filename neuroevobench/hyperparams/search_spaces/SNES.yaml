@@ -4,8 +4,6 @@ real:
     end: 0.15
     prior: "uniform"
 categorical:
-  centered_rank:
-    - false
   temperature:
     - 0.0
     - 10

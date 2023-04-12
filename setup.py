@@ -43,8 +43,9 @@ requires = [
     "brax",
     "tensorflow",
     "tensorflow_datasets",
-    # "mle-toolbox[full]==0.3.4",
+    "mle-toolbox[full]",
     "xgboost",
+    "wandb",
 ]
 
 setup(
@@ -72,4 +73,9 @@ setup(
     python_requires=">=3.7",
     install_requires=requires,
     tests_requre=[],
+    entry_points={
+        "console_scripts": [
+            "neb=neuroevobench.search:mle_neb_search",
+        ]
+    },
 )

@@ -19,6 +19,7 @@ class BraxEvaluator(object):
         num_evals_per_member: int = 8,
         seed_id: int = 0,
         log: Optional[Any] = None,
+        time_tick_str: str = "num_gens",
         iter_id: Optional[int] = None,
     ):
         self.popsize = popsize
@@ -32,6 +33,7 @@ class BraxEvaluator(object):
         self.num_evals_per_member = num_evals_per_member
         self.seed_id = seed_id
         self.log = log
+        self.time_tick_str = time_tick_str
         self.iter_id = iter_id
         self.setup()
 
@@ -70,7 +72,7 @@ class BraxEvaluator(object):
         mean_es_returns, best_member_returns = self.evaluate(
             self.strategy.es_state
         )
-        time_tic = {"num_gens": 0}
+        time_tic = {self.time_tick_str: 0}
         if self.iter_id is not None:
             time_tic["iter_id"] = self.iter_id
         stats_tic = {
@@ -94,7 +96,7 @@ class BraxEvaluator(object):
                 mean_es_returns, best_member_returns = self.evaluate(
                     self.strategy.es_state
                 )
-                time_tic = {"num_gens": gen_counter}
+                time_tic = {self.time_tick_str: gen_counter}
                 if self.iter_id is not None:
                     time_tic["iter_id"] = self.iter_id
                 stats_tic = {

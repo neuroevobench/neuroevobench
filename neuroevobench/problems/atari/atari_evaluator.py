@@ -74,7 +74,7 @@ class AtariEvaluator(object):
                     "test_eval_perf": float(eval_rewards[0]),
                     "best_eval_perf": float(eval_rewards[1]),
                 }
-                if log is not None:
-                    log.update(time_tic, stats_tic, save=True)
+                if self.log is not None:
+                    self.log.update(time_tic, stats_tic, save=True)
                 else:
                     print(time_tic, stats_tic)

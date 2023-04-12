@@ -5,6 +5,7 @@ real:
     prior: "uniform"
 categorical:
   elite_ratio:
+    - 0.0
     - 0.1
     - 0.15
     - 0.2

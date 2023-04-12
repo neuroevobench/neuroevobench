@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 import sys
 import pandas as pd
 from pathlib import Path
@@ -31,6 +31,7 @@ class CSV_Logger(object):
         self,
         time_tic: Dict[str, float],
         stats_tic: Dict[str, float],
+        model: Optional[Any] = None,
         save: bool = True,
         verbose: bool = True,
     ):

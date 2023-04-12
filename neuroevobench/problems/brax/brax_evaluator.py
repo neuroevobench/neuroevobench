@@ -3,10 +3,10 @@ import chex
 import jax.numpy as jnp
 from evojax.obs_norm import ObsNormalizer
 from evojax.sim_mgr import SimManager
-from evosax.utils.evojax_wrapper import Evosax2JAX_Wrapper
+from ..neb_evaluator import NeuroevolutionEvaluator
 
 
-class BraxEvaluator(object):
+class BraxEvaluator(NeuroevolutionEvaluator):
     def __init__(
         self,
         policy,
@@ -22,32 +22,25 @@ class BraxEvaluator(object):
         time_tick_str: str = "num_gens",
         iter_id: Optional[int] = None,
     ):
-        self.popsize = popsize
-        self.policy = policy
-        self.es_strategy = es_strategy
-        self.es_config = es_config
-        self.es_config["maximize"] = True
-        self.es_params = es_params
-        self.train_task = train_task
-        self.test_task = test_task
+        self.problem_type = "brax"
         self.num_evals_per_member = num_evals_per_member
-        self.seed_id = seed_id
-        self.log = log
-        self.time_tick_str = time_tick_str
-        self.iter_id = iter_id
-        self.setup()
-
-    def setup(self):
-        """Initialize task, strategy & policy"""
-        self.strategy = Evosax2JAX_Wrapper(
-            self.es_strategy,
-            param_size=self.policy.num_params,
-            pop_size=self.popsize,
-            es_config=self.es_config,
-            es_params=self.es_params,
-            seed=self.seed_id,
+        super().__init__(
+            policy,
+            train_task,
+            test_task,
+            popsize,
+            es_strategy,
+            es_config,
+            es_params,
+            seed_id,
+            log,
+            time_tick_str,
+            iter_id,
+            maximize_objective=True,
         )
 
+    def setup_task(self):
+        """Setup task-specific things (obs norm, simmanger, etc.)."""
         self.obs_normalizer = ObsNormalizer(
             obs_shape=self.train_task.obs_shape, dummy=False
         )
@@ -65,55 +58,17 @@ class BraxEvaluator(object):
             n_evaluations=128,
         )
 
-    def run(self, num_generations: int = 2000, eval_every_gen=50):
-        """Run evolution loop with logging."""
-        print(f"START EVOLVING {self.policy.num_params} PARAMETERS.")
-        # Run very first evaluation
-        mean_es_returns, best_member_returns = self.evaluate(
-            self.strategy.es_state
-        )
-        time_tic = {self.time_tick_str: 0}
-        if self.iter_id is not None:
-            time_tic["iter_id"] = self.iter_id
-        stats_tic = {
-            "test_eval_perf": float(mean_es_returns),
-            "best_eval_perf": float(best_member_returns),
-        }
-        self.update_log(time_tic, stats_tic)
-        best_return = best_member_returns
+    def evaluate_pop(self, params: chex.Array) -> chex.Array:
+        """Evaluate population on train task."""
+        fitness, _ = self.sim_mgr.eval_params(params=params, test=False)
+        return fitness
 
-        # Run evolution loop
-        for gen_counter in range(1, num_generations + 1):
-            params = self.strategy.ask()
-            fitness, _ = self.sim_mgr.eval_params(params=params, test=False)
-            self.strategy.tell(fitness=fitness)
-            improved = best_return < fitness.max()
-            best_return = (
-                best_return * (1 - improved) + fitness.max() * improved
-            )
-
-            if gen_counter % eval_every_gen == 0:
-                mean_es_returns, best_member_returns = self.evaluate(
-                    self.strategy.es_state
-                )
-                time_tic = {self.time_tick_str: gen_counter}
-                if self.iter_id is not None:
-                    time_tic["iter_id"] = self.iter_id
-                stats_tic = {
-                    "mean_pop_perf": float(fitness.mean()),
-                    "max_pop_perf": float(fitness.max()),
-                    "best_pop_perf": float(best_return),
-                    "test_eval_perf": float(mean_es_returns),
-                    "best_eval_perf": float(best_member_returns),
-                }
-                self.update_log(time_tic, stats_tic)
-
-    def evaluate(self, es_state) -> Tuple[chex.Array, chex.Array]:
+    def evaluate_perf(self) -> Tuple[chex.Array, chex.Array]:
         """Evaluate mean and best_member of test task."""
         eval_params = jnp.stack(
             [
-                es_state.mean.reshape(-1, 1),
-                es_state.best_member.reshape(-1, 1),
+                self.es_state.mean.reshape(-1, 1),
+                self.es_state.best_member.reshape(-1, 1),
             ]
         ).squeeze()
         mean_return, _ = self.sim_mgr.eval_params(
@@ -123,21 +78,3 @@ class BraxEvaluator(object):
             params=eval_params[1], test=True
         )
         return mean_return.mean(), best_return.mean()
-
-    def update_log(self, time_tic, stats_tic, model: Optional[Any] = None):
-        """Update logger with newest data."""
-        if self.log is not None:
-            self.log.update(time_tic, stats_tic, save=True)
-        else:
-            print(time_tic, stats_tic)
-
-    @property
-    def fitness_eval(self):
-        """Get latest fitness evaluation score."""
-        # TODO(Robert): Hack to get the latest fitness score - CSVLogger?
-        return self.log.stats_log.stats_tracked["test_eval_perf"][-1]
-
-    @property
-    def solution_eval(self):
-        """Get latest solution parameters."""
-        return self.strategy.solution

@@ -1,32 +1,31 @@
 from typing import Optional
-from brax.v1.envs import create
 from evosax import Strategies
-from .brax_policy import BraxPolicy
-from .brax_task import BraxTask
-from .brax_evaluator import BraxEvaluator
+from .addition_policy import AdditionPolicy
+from .addition_task import AdditionTask
+from .addition_evaluator import AdditionEvaluator
 
 
-def brax_run(config, log, search_iter: Optional[int] = None):
+def addition_run(config, log, search_iter: Optional[int] = None):
     """Running an ES loop on Brax task."""
     # 1. Create placeholder env to get number of actions for policy init
-    env = create(env_name=config.env_name, legacy_spring=True)
-    policy = BraxPolicy(
-        input_dim=env.observation_size,
-        output_dim=env.action_size,
-        hidden_dims=config.model_config.num_hidden_layers
-        * [config.model_config.num_hidden_units],
-    )
+    policy = AdditionPolicy(hidden_dims=config.model_config.num_hidden_units)
 
     # 2. Define train/test task based on configs/eval settings
-    train_task = BraxTask(
-        config.env_name, config.task_config.max_steps, test=False
+    train_task = AdditionTask(
+        config.task_config.batch_size,
+        seq_length=config.task_config.seq_length,
+        seed_id=config.seed_id,  # Fix seed for data generation
+        test=False,
     )
-    test_task = BraxTask(
-        config.env_name, config.task_config.max_steps, test=True
+    test_task = AdditionTask(
+        10000,
+        seq_length=config.task_config.seq_length,
+        seed_id=config.seed_id,  # Fix seed for data generation
+        test=True,
     )
 
     # 3. Setup task evaluator with strategy and policy
-    evaluator = BraxEvaluator(
+    evaluator = AdditionEvaluator(
         policy=policy,
         train_task=train_task,
         test_task=test_task,
@@ -34,7 +33,6 @@ def brax_run(config, log, search_iter: Optional[int] = None):
         es_strategy=Strategies[config.strategy_name],
         es_config=config.es_config,
         es_params=config.es_params,
-        num_evals_per_member=config.task_config.num_evals_per_member,
         seed_id=config.seed_id,
         log=log,
         iter_id=search_iter,

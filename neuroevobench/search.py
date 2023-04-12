@@ -1,5 +1,6 @@
 import os
 import copy
+import yaml
 from mle_hyperopt import RandomSearch
 from neuroevobench.problems import neb_eval_loops
 from neuroevobench.hyperparams import HyperSpace
@@ -16,7 +17,7 @@ def neb_search_loop(config, log):
         seed_id=config.seed_id,
         verbose=True,
     )
-    log_name = f"search_log_seed_{config.seed_id}"
+    log_name = f"{config.problem_type}_search_sid_{config.seed_id}"
 
     # Run the random search hyperparameter optimization loop
     for search_iter in range(config.num_hyper_search_iters):
@@ -44,6 +45,11 @@ def neb_search_loop(config, log):
     hyper_strategy.plot_best(
         os.path.join(log.experiment_dir, log_name + ".png")
     )
+
+    # Store best EO configuration in file - best_config.yaml
+    _, best_config, _, _ = hyper_strategy.get_best()
+    with open(os.path.join(log.experiment_dir, "best_config.yaml"), "w") as f:
+        yaml.dump(best_config, f, default_flow_style=False)
 
 
 def mle_neb_search():

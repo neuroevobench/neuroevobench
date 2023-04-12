@@ -29,6 +29,7 @@ log_config:
   what_to_track: 
     - "mean_pop_perf"
     - "max_pop_perf"
+    - "min_pop_perf"
     - "best_pop_perf"
     - "test_eval_perf"
     - "best_eval_perf"

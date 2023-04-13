@@ -1,7 +1,7 @@
-from .addition_wrapped import addition_run
-from .addition_policy import AdditionPolicy
-from .addition_task import AdditionTask
-from .addition_evaluator import AdditionEvaluator
+from .wrapped import addition_run
+from .policy import AdditionPolicy
+from .task import AdditionTask
+from .evaluator import AdditionEvaluator
 
 __all__ = [
     "addition_run",

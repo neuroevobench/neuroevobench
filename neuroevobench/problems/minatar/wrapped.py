@@ -2,8 +2,8 @@ from typing import Optional
 import gymnax
 from gymnax.wrappers.evojax import GymnaxToEvoJaxTask
 from evosax import Strategies
-from .minatar_policy import MinAtarPolicy
-from .minatar_evaluator import MinAtarEvaluator
+from .policy import MinAtarPolicy
+from .evaluator import MinAtarEvaluator
 
 
 def minatar_run(config, log, search_iter: Optional[int] = None):

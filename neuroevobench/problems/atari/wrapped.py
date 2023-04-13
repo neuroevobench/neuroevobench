@@ -1,9 +1,9 @@
 from typing import Optional
 from evosax import Strategies
 import envpool
-from .atari_policy import AtariPolicy
-from .atari_task import AtariTask
-from .atari_evaluator import AtariEvaluator
+from .policy import AtariPolicy
+from .task import AtariTask
+from .evaluator import AtariEvaluator
 
 
 def atari_run(config, log, search_iter: Optional[int] = None):

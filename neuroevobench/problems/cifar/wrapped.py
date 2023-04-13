@@ -1,8 +1,8 @@
 from typing import Optional
 from evosax import Strategies
-from .cifar_policy import CifarPolicy
-from .cifar_task import CifarTask
-from .cifar_evaluator import CifarEvaluator
+from .policy import CifarPolicy
+from .task import CifarTask
+from .evaluator import CifarEvaluator
 
 
 def cifar_run(config, log, search_iter: Optional[int] = None):

@@ -1,5 +1,9 @@
-from .mnist_policy import MNISTPolicy
-from .mnist_task import MNISTTask
-from .mnist_evaluator import MNISTEvaluator
+from .policy import MNIST_Classify_Policy
+from .task import MNIST_Classify_Task
+from .evaluator import MNIST_Classify_Evaluator
 
-__all__ = ["MNISTPolicy", "MNISTTask", "MNISTEvaluator"]
+__all__ = [
+    "MNIST_Classify_Policy",
+    "MNIST_Classify_Task",
+    "MNIST_Classify_Evaluator",
+]

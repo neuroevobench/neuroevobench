@@ -4,7 +4,7 @@ from evojax.sim_mgr import SimManager
 from evosax.utils.evojax_wrapper import Evosax2JAX_Wrapper
 
 
-class MNISTEvaluator(object):
+class MNIST_Classify_Evaluator(object):
     def __init__(
         self,
         policy,

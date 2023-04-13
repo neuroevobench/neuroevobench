@@ -1,5 +1,5 @@
-from .smnist_policy import SMNISTPolicy
-from .smnist_task import SMNISTTask
-from .smnist_evaluator import SMNISTEvaluator
+from .policy import SMNISTPolicy
+from .task import SMNISTTask
+from .evaluator import SMNISTEvaluator
 
 __all__ = ["SMNISTPolicy", "SMNISTTask", "SMNISTEvaluator"]

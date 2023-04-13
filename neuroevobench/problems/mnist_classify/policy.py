@@ -50,7 +50,7 @@ class MNIST_CNN(nn.Module):
         return x
 
 
-class MNISTPolicy(PolicyNetwork):
+class MNIST_Classify_Policy(PolicyNetwork):
     """A convolutional neural network for the MNIST classification task."""
 
     def __init__(

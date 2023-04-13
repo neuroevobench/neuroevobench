@@ -1,9 +1,9 @@
 from typing import Optional
 from brax.v1.envs import create
 from evosax import Strategies
-from .brax_policy import BraxPolicy
-from .brax_task import BraxTask
-from .brax_evaluator import BraxEvaluator
+from .policy import BraxPolicy
+from .task import BraxTask
+from .evaluator import BraxEvaluator
 
 
 def brax_run(config, log, search_iter: Optional[int] = None):

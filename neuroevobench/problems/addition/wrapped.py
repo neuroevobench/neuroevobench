@@ -1,8 +1,8 @@
 from typing import Optional
 from evosax import Strategies
-from .addition_policy import AdditionPolicy
-from .addition_task import AdditionTask
-from .addition_evaluator import AdditionEvaluator
+from .policy import AdditionPolicy
+from .task import AdditionTask
+from .evaluator import AdditionEvaluator
 
 
 def addition_run(config, log, search_iter: Optional[int] = None):

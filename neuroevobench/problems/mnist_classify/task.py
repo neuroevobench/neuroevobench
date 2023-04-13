@@ -26,7 +26,7 @@ class MNISTState(TaskState):
     labels: chex.Array
 
 
-class MNISTTask(VectorizedTask):
+class MNIST_Classify_Task(VectorizedTask):
     def __init__(
         self,
         env_name: str = "mnist",

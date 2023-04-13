@@ -1,9 +1,9 @@
 from typing import Optional
 from evosax import Strategies
 import envpool
-from neuroevobench.problems.atari import AtariPolicy
-from neuroevobench.problems.atari import AtariTask
-from neuroevobench.problems.atari import AtariEvaluator
+from .atari_policy import AtariPolicy
+from .atari_task import AtariTask
+from .atari_evaluator import AtariEvaluator
 
 
 def atari_run(config, log, search_iter: Optional[int] = None):

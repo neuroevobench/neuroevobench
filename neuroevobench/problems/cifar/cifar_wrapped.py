@@ -1,10 +1,11 @@
+from typing import Optional
 from evosax import Strategies
-from neuroevobench.problems.cifar import CifarPolicy
-from neuroevobench.problems.cifar import CifarTask
-from neuroevobench.problems.cifar import CifarEvaluator
+from .cifar_policy import CifarPolicy
+from .cifar_task import CifarTask
+from .cifar_evaluator import CifarEvaluator
 
 
-def main(config, log):
+def cifar_run(config, log, search_iter: Optional[int] = None):
     """Running an ES loop on Cifar10 task."""
     # 1. Create placeholder env to get number of actions for policy init
     policy = CifarPolicy()
@@ -24,6 +25,7 @@ def main(config, log):
         es_params=config.es_params,
         seed_id=config.seed_id,
         log=log,
+        iter_id=search_iter,
     )
 
     # 4. Run the ES loop with logging
@@ -32,10 +34,5 @@ def main(config, log):
         config.eval_every_gen,
     )
 
-
-if __name__ == "__main__":
-    from mle_toolbox import MLExperiment
-
-    # Setup experiment run (visible GPUs for JAX parallelism)
-    mle = MLExperiment(config_fname="train.yaml")
-    main(mle.train_config, mle.log)
+    # 5. Return mean params and final performance
+    return evaluator.fitness_eval, evaluator.solution_eval

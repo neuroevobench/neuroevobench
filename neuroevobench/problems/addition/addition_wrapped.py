@@ -6,7 +6,7 @@ from .addition_evaluator import AdditionEvaluator
 
 
 def addition_run(config, log, search_iter: Optional[int] = None):
-    """Running an ES loop on Brax task."""
+    """Running an ES loop on Addition task."""
     # 1. Create placeholder env to get number of actions for policy init
     policy = AdditionPolicy(hidden_dims=config.model_config.num_hidden_units)
 

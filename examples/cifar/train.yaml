@@ -3,8 +3,6 @@ train_config:
   eval_every_gen: 100
   strategy_name: "Sep_CMA_ES"
   popsize: 64
-  model_config:
-    num_hidden_units: 48
   task_config:
     batch_size: 128
   es_config:

@@ -6,6 +6,7 @@ from .cifar import cifar_run
 from .minatar import minatar_run
 from .mnist_classify import mnist_classify_run
 from .smnist import smnist_run
+from .svhn import svhn_run
 
 # Dictionary look up of training loops
 neb_eval_loops = {
@@ -15,7 +16,8 @@ neb_eval_loops = {
     "cifar": cifar_run,
     "minatar": minatar_run,
     "mnist_classify": mnist_classify_run,
-    "smnist_run": smnist_run,
+    "smnist": smnist_run,
+    "svhn": svhn_run,
 }
 
 
@@ -28,5 +30,6 @@ __all__ = [
     "minatar_run",
     "mnist_classify_run",
     "smnist_run",
+    "svhn_run",
     "neb_eval_loops",
 ]

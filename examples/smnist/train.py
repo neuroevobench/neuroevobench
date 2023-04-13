@@ -5,7 +5,7 @@ from neuroevobench.problems.smnist import SMNISTEvaluator
 
 
 def main(config, log):
-    """Running an ES loop on Brax task."""
+    """Running an ES loop on SVHN task."""
     # 1. Create placeholder env to get number of actions for policy init
     policy = SMNISTPolicy(hidden_dims=config.model_config.num_hidden_units)
 
@@ -33,13 +33,13 @@ def main(config, log):
         es_config=config.es_config,
         es_params=config.es_params,
         seed_id=config.seed_id,
+        log=log,
     )
 
     # 4. Run the ES loop with logging
     evaluator.run(
         config.num_generations,
         config.eval_every_gen,
-        log=log,
     )
 
 
@@ -47,5 +47,5 @@ if __name__ == "__main__":
     from mle_toolbox import MLExperiment
 
     # Setup experiment run (visible GPUs for JAX parallelism)
-    mle = MLExperiment(config_fname="configs/train.yaml")
+    mle = MLExperiment(config_fname="train.yaml")
     main(mle.train_config, mle.log)

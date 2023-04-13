@@ -61,5 +61,5 @@ class AdditionEvaluator(NeuroevolutionEvaluator):
             ]
         ).squeeze()
         eval_params = self.strategy.param_reshaper.reshape(eval_params)
-        _, test_acc = self.test_task.evaluate(rng_test, eval_params)
-        return test_acc[0], test_acc[1]
+        _, test_perf = self.test_task.evaluate(rng_test, eval_params)
+        return test_perf[0], test_perf[1]

@@ -1,10 +1,11 @@
+from typing import Optional
 from evosax import Strategies
-from neuroevobench.problems.svhn import SVHNPolicy
-from neuroevobench.problems.svhn import SVHNTask
-from neuroevobench.problems.svhn import SVHNEvaluator
+from .policy import SVHNPolicy
+from .task import SVHNTask
+from .evaluator import SVHNEvaluator
 
 
-def main(config, log):
+def svhn_run(config, log, search_iter: Optional[int] = None):
     """Running an ES loop on SVHN task."""
     # 1. Create placeholder env to get number of actions for policy init
     policy = SVHNPolicy(config.model_config.resnet_no)
@@ -24,18 +25,11 @@ def main(config, log):
         es_params=config.es_params,
         seed_id=config.seed_id,
         log=log,
+        iter_id=search_iter,
     )
 
     # 4. Run the ES loop with logging
-    evaluator.run(
-        config.num_generations,
-        config.eval_every_gen,
-    )
+    evaluator.run(config.num_generations, config.eval_every_gen)
 
-
-if __name__ == "__main__":
-    from mle_toolbox import MLExperiment
-
-    # Setup experiment run (visible GPUs for JAX parallelism)
-    mle = MLExperiment(config_fname="train.yaml")
-    main(mle.train_config, mle.log)
+    # 5. Return mean params and final performance
+    return evaluator.fitness_eval, evaluator.solution_eval

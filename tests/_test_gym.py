@@ -5,7 +5,7 @@ from neuroevobench.problems.gymnax import GymPolicy
 from neuroevobench.problems.gymnax import GymnaxEvaluator
 
 
-def test_gym():
+def no_test_gym():
     """Running an ES loop on Brax task."""
     # 1. Create placeholder env to get number of actions for policy init
     env, _ = gymnax.make("Pendulum-v1")

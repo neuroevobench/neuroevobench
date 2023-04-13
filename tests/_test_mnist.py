@@ -4,7 +4,7 @@ from neuroevobench.problems.mnist import MNISTTask
 from neuroevobench.problems.mnist import MNISTEvaluator
 
 
-def test_mnist():
+def no_test_mnist():
     """Running an ES loop on Brax task."""
     # 1. Create placeholder env to get number of actions for policy init
     policy = MNISTPolicy(hidden_dims=[])

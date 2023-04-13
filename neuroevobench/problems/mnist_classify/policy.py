@@ -59,10 +59,12 @@ class MNIST_Classify_Policy(PolicyNetwork):
     ):
         self.input_dim = [1, 28, 28, 1]
         self.model = MNIST_CNN(hidden_dims)
-        self.params = self.model.init(
+        self.pholder_params = self.model.init(
             jax.random.PRNGKey(0), jnp.zeros(self.input_dim)
         )
-        self.num_params, format_params_fn = get_params_format_fn(self.params)
+        self.num_params, format_params_fn = get_params_format_fn(
+            self.pholder_params
+        )
         self._format_params_fn = jax.vmap(format_params_fn)
         self._forward_fn = jax.vmap(self.model.apply)
 

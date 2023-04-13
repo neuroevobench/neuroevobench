@@ -1,33 +1,26 @@
 from typing import Optional
-import gymnax
-from gymnax.wrappers.evojax import GymnaxToEvoJaxTask
 from evosax import Strategies
-from .policy import MinAtarPolicy
-from .evaluator import MinAtarEvaluator
+from .policy import MNIST_Classify_Policy
+from .task import MNIST_Classify_Task
+from .evaluator import MNIST_Classify_Evaluator
 
 
-def minatar_run(config, log, search_iter: Optional[int] = None):
-    """Running an ES loop on MinAtar control task."""
+def mnist_classify_run(config, log, search_iter: Optional[int] = None):
+    """Running an ES loop on MNIST classification task."""
     # 1. Create placeholder env to get number of actions for policy init
-    env, _ = gymnax.make(config.env_name)
-
-    policy = MinAtarPolicy(
-        input_dim=env.obs_shape,
-        output_dim=env.num_actions,
+    policy = MNIST_Classify_Policy(
         hidden_dims=config.model_config.num_hidden_layers
         * [config.model_config.num_hidden_units],
     )
 
     # 2. Define train/test task based on configs/eval settings
-    train_task = GymnaxToEvoJaxTask(
-        config.env_name, config.task_config.max_steps, test=False
+    train_task = MNIST_Classify_Task(
+        config.env_name, config.task_config.batch_size, test=False
     )
-    test_task = GymnaxToEvoJaxTask(
-        config.env_name, config.task_config.max_steps, test=True
-    )
+    test_task = MNIST_Classify_Task(config.env_name, 0, test=True)
 
     # 3. Setup task evaluator with strategy and policy
-    evaluator = MinAtarEvaluator(
+    evaluator = MNIST_Classify_Evaluator(
         policy=policy,
         train_task=train_task,
         test_task=test_task,
@@ -35,7 +28,6 @@ def minatar_run(config, log, search_iter: Optional[int] = None):
         es_strategy=Strategies[config.strategy_name],
         es_config=config.es_config,
         es_params=config.es_params,
-        num_evals_per_member=config.task_config.num_evals_per_member,
         seed_id=config.seed_id,
         log=log,
         iter_id=search_iter,

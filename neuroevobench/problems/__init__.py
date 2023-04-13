@@ -5,7 +5,9 @@ from .brax import brax_run
 from .cifar import cifar_run
 from .minatar import minatar_run
 from .mnist_classify import mnist_classify_run
+from .smnist import smnist_run
 
+# Dictionary look up of training loops
 neb_eval_loops = {
     "addition": addition_run,
     "atari": atari_run,
@@ -13,6 +15,7 @@ neb_eval_loops = {
     "cifar": cifar_run,
     "minatar": minatar_run,
     "mnist_classify": mnist_classify_run,
+    "smnist_run": smnist_run,
 }
 
 
@@ -24,5 +27,6 @@ __all__ = [
     "cifar_run",
     "minatar_run",
     "mnist_classify_run",
+    "smnist_run",
     "neb_eval_loops",
 ]

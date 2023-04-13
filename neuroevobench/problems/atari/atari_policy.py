@@ -56,11 +56,11 @@ class AtariPolicy(object):
             self.model = AtariAllCNN(num_actions)
         else:
             self.model = AtariCNN(num_actions, hidden_dims)
-        self.params = self.model.init(
+        self.pholder_params = self.model.init(
             jax.random.PRNGKey(0), jnp.zeros(self.input_dim)
         )
         self.num_params, self.format_params_fn = get_params_format_fn(
-            self.params
+            self.pholder_params
         )
         self._format_params_fn = jax.vmap(self.format_params_fn)
         self._forward_fn = jax.vmap(self.model.apply)

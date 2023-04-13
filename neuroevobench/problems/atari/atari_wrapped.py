@@ -1,12 +1,13 @@
-import envpool
+from typing import Optional
 from evosax import Strategies
+import envpool
 from neuroevobench.problems.atari import AtariPolicy
 from neuroevobench.problems.atari import AtariTask
 from neuroevobench.problems.atari import AtariEvaluator
 
 
-def main(config, log):
-    """Running an ES loop on ATARI task."""
+def atari_run(config, log, search_iter: Optional[int] = None):
+    """Running an EO loop on ATARI task."""
     # 1. Create placeholder env to get number of actions for policy init
     env = envpool.make_gym(config.task_config.env_name, num_envs=1)
     policy = AtariPolicy(num_actions=env.action_space.n, **config.model_config)
@@ -36,6 +37,7 @@ def main(config, log):
         es_params=config.es_params,
         seed_id=config.seed_id,
         log=log,
+        iter_id=search_iter,
     )
 
     # 4. Run the ES loop with logging
@@ -44,10 +46,5 @@ def main(config, log):
         config.eval_every_gen,
     )
 
-
-if __name__ == "__main__":
-    from mle_toolbox import MLExperiment
-
-    # Setup experiment run (visible GPUs for JAX parallelism)
-    mle = MLExperiment(config_fname="train.yaml")
-    main(mle.train_config, mle.log)
+    # 5. Return mean params and final performance
+    return evaluator.fitness_eval, evaluator.solution_eval

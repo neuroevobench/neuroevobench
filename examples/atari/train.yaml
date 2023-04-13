@@ -3,12 +3,10 @@ train_config:
   eval_every_gen: 10
   strategy_name: "OpenES"
   popsize: 128
-  train_task_config:
+  task_config:
     env_name: "Pong-v5"
     max_steps: 500
     num_envs_per_member: 2
-  test_task_config:
-    num_envs_per_member: 20
   model_config:
     hidden_dims: [32]
     use_all_cnn: false

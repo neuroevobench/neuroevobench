@@ -53,10 +53,12 @@ class MinAtarPolicy(PolicyNetwork):
     ):
         self.input_dim = [1, *input_dim]
         self.model = MinAtarCNN(hidden_dims=hidden_dims, out_dim=output_dim)
-        self.params = self.model.init(
+        self.pholder_params = self.model.init(
             jax.random.PRNGKey(0), jnp.ones(self.input_dim)
         )
-        self.num_params, format_params_fn = get_params_format_fn(self.params)
+        self.num_params, format_params_fn = get_params_format_fn(
+            self.pholder_params
+        )
         self._format_params_fn = jax.vmap(format_params_fn)
         self._forward_fn = jax.vmap(self.model.apply)
 

@@ -3,12 +3,14 @@ from .addition import addition_run
 from .atari import atari_run
 from .brax import brax_run
 from .cifar import cifar_run
+from .minatar import minatar_run
 
 neb_eval_loops = {
     "addition": addition_run,
     "atari": atari_run,
     "brax": brax_run,
     "cifar": cifar_run,
+    "minatar": minatar_run,
 }
 
 
@@ -18,5 +20,6 @@ __all__ = [
     "atari_run",
     "brax_run",
     "cifar_run",
+    "minatar_run",
     "neb_eval_loops",
 ]

@@ -131,4 +131,4 @@ class NeuroevolutionEvaluator(object):
     @property
     def solution_eval(self):
         """Get latest solution parameters."""
-        return self.strategy.solution
+        return self.es_state.mean

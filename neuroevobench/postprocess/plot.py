@@ -47,7 +47,7 @@ def plot_task(
 
     # Prettify the plot
     if plot_legend:
-        ax.legend(loc=legend_loc, fontsize=10)
+        ax.legend(loc=legend_loc, fontsize=14)
     ax.set_title(title)
     if plot_ylabel:
         ax.set_ylabel(ylabel)

@@ -28,7 +28,9 @@ def neb_search_loop(config, log):
             eval_config.es_config[k] = v
         # Evaluate the parameter config by running a ES loop
         performance, solution = neb_eval_loops[config.problem_type](
-            search_iter, eval_config, log
+            eval_config,
+            log,
+            search_iter,
         )
 
         # Update search strategy - Note we minimize!

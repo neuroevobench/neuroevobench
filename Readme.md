@@ -2,10 +2,17 @@
 
 This repository contains benchmark results, helper scripts, ES configurations and logs for testing the performance of evolutionary strategies in [`evosax`](https://github.com/RobertTLange/evosax/).
 
-## Installation
+## Installation & Setup
 
 ```
-pip install -r requirements.txt
+conda create -n es_bench python=3.9
+source activate es_bench
+pip install "jax[cuda11_cudnn82]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+pip install -e .
+```
+
+```
+python3 -m pip install nvidia-cudnn-cu11==8.6.0.163
 ```
 
 ## Running the Benchmarks for a Single ES + Problem
@@ -13,22 +20,17 @@ pip install -r requirements.txt
 ### Launching a Single Configuration & Single Seed Run
 
 ```
-python train.py -config configs/<ES>/<problem>.yaml
+cd examples/brax
+python train.py -config train.yaml
 ```
 
 ### Launching a Multi-Seed Grid Search
 
 ```
-mle run configs/<ES>/search_<problem>.yaml
+cd research/search
+neb -config train.yaml
 ```
 
 ### TODOs
 
 - [ ] Add rliable metrics
-- [ ] Write CIFAR-10 evaluator
-- [ ] Add storage of full ES state
-- [ ] Add mle-hyperopt search and configurations for search
-- [ ] Run first brax search (500 Steps)
-
-- [ ] Add iter_id to all evaluators -> write general abstraction
-- [ ] Add fitness/solution retrieval to all evaluators

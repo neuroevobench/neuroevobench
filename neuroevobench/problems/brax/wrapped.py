@@ -1,5 +1,4 @@
 from typing import Optional
-from brax.v1.envs import create
 from evosax import Strategies
 from .policy import BraxPolicy
 from .task import BraxTask
@@ -8,6 +7,8 @@ from .evaluator import BraxEvaluator
 
 def brax_run(config, log, search_iter: Optional[int] = None):
     """Running an ES loop on Brax task."""
+    from brax.v1.envs import create
+
     # 1. Create placeholder env to get number of actions for policy init
     env = create(env_name=config.env_name, legacy_spring=True)
     policy = BraxPolicy(

@@ -1,6 +1,6 @@
 """Adapted from https://github.com/google/evojax/blob/main/evojax/task/brax_task.py"""
 import sys
-from typing import Tuple
+from typing import Tuple, Any
 
 import jax
 import jax.numpy as jnp
@@ -12,17 +12,16 @@ from evojax.task.base import TaskState
 try:
     from brax.v1.envs import create
     from brax.v1.envs import State as BraxState
-except ModuleNotFoundError:
+    from .modified_ant import create_modified_ant_env
+except Exception:
     print("You need to install brax for Brax tasks:")
     print("  pip install git+https://github.com/google/brax.git@main")
-    sys.exit(1)
-
-from .modified_ant import create_modified_ant_env
+    # sys.exit(1)
 
 
 @dataclass
 class State(TaskState):
-    state: BraxState
+    state: Any
     obs: jnp.ndarray
 
 

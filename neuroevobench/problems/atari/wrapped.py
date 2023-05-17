@@ -1,9 +1,13 @@
 from typing import Optional
 from evosax import Strategies
-import envpool
 from .policy import AtariPolicy
 from .task import AtariTask
 from .evaluator import AtariEvaluator
+
+try:
+    import envpool
+except Exception:
+    print("envpool not installed, Atari problems will not work.")
 
 
 def atari_run(config, log, search_iter: Optional[int] = None):

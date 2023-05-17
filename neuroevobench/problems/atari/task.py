@@ -1,7 +1,11 @@
 import time
 import jax
 import jax.numpy as jnp
-import envpool
+
+try:
+    import envpool
+except Exception:
+    print("envpool not installed, Atari problems will not work.")
 
 
 class AtariTask(object):

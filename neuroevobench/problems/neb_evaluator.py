@@ -39,7 +39,13 @@ class NeuroevolutionEvaluator(object):
         """Initialize task, strategy & policy for downstream train loop."""
         self.rng = jax.random.PRNGKey(self.seed_id)
         # Brax evaluation is happening via Evojax, which requires flat vectors
-        if self.problem_type in ["brax", "atari", "minatar", "mnist_classify"]:
+        if self.problem_type in [
+            "brax",
+            "atari",
+            "minatar",
+            "mnist_classify",
+            "mnist_generate",
+        ]:
             self.strategy = self.es_strategy(
                 popsize=self.popsize,
                 num_dims=self.policy.num_params,

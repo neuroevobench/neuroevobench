@@ -33,7 +33,6 @@ class MNIST_Classify_Task(VectorizedTask):
         batch_size: int = 1024,
         test: bool = False,
     ):
-
         self.max_steps = 1
         self.obs_shape = tuple([28, 28, 1])
         self.act_shape = tuple([10])

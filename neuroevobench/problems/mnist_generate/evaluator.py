@@ -1,11 +1,12 @@
-from typing import Optional, Any, Tuple
+from typing import Tuple, Optional, Any
 import chex
-import jax
 import jax.numpy as jnp
+from evojax.obs_norm import ObsNormalizer
+from evojax.sim_mgr import SimManager
 from ..neb_evaluator import NeuroevolutionEvaluator
 
 
-class AdditionEvaluator(NeuroevolutionEvaluator):
+class MNIST_Generate_Evaluator(NeuroevolutionEvaluator):
     def __init__(
         self,
         policy,
@@ -15,12 +16,14 @@ class AdditionEvaluator(NeuroevolutionEvaluator):
         es_strategy,
         es_config={},
         es_params={},
+        num_evals_per_member: int = 1,
         seed_id: int = 0,
         log: Optional[Any] = None,
         time_tick_str: str = "num_gens",
         iter_id: Optional[int] = None,
     ):
-        self.problem_type = "addition"
+        self.problem_type = "mnist_generate"
+        self.num_evals_per_member = num_evals_per_member
         super().__init__(
             policy,
             train_task,
@@ -37,29 +40,41 @@ class AdditionEvaluator(NeuroevolutionEvaluator):
         )
 
     def setup_task(self):
-        """Set apply functions for both train and test tasks."""
-        self.train_task.set_apply_fn(
-            self.policy.model.apply, self.policy.model.initialize_carry
+        """Initialize task, strategy & policy"""
+        self.obs_normalizer = ObsNormalizer(
+            obs_shape=self.train_task.obs_shape, dummy=True
         )
-        self.test_task.set_apply_fn(
-            self.policy.model.apply, self.policy.model.initialize_carry
+
+        self.sim_mgr = SimManager(
+            policy_net=self.policy,
+            train_vec_task=self.train_task,
+            valid_vec_task=self.test_task,
+            seed=self.seed_id,
+            obs_normalizer=self.obs_normalizer,
+            pop_size=self.popsize,
+            use_for_loop=True,
+            n_repeats=1,
+            test_n_repeats=1,
+            n_evaluations=1,
         )
 
     def evaluate_pop(self, params: chex.Array) -> chex.Array:
         """Evaluate population on train task."""
-        self.rng, rng_eval = jax.random.split(self.rng)
-        fitness, _ = self.train_task.evaluate(rng_eval, params)
+        fitness, _ = self.sim_mgr.eval_params(params=params, test=False)
         return fitness
 
     def evaluate_perf(self) -> Tuple[chex.Array, chex.Array]:
         """Evaluate mean and best_member of test task."""
-        self.rng, rng_test = jax.random.split(self.rng)
         eval_params = jnp.stack(
             [
                 self.es_state.mean.reshape(-1, 1),
                 self.es_state.best_member.reshape(-1, 1),
             ]
         ).squeeze()
-        eval_params = self.strategy.param_reshaper.reshape(eval_params)
-        _, test_perf = self.test_task.evaluate(rng_test, eval_params)
-        return -test_perf[0], -test_perf[1]
+        mean_return, _ = self.sim_mgr.eval_params(
+            params=eval_params[0], test=True
+        )
+        best_return, _ = self.sim_mgr.eval_params(
+            params=eval_params[1], test=True
+        )
+        return mean_return.mean(), best_return.mean()

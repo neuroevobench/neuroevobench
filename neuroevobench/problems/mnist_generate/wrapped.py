@@ -1,31 +1,26 @@
 from typing import Optional
 from evosax import Strategies
-from .policy import AdditionPolicy
-from .task import AdditionTask
-from .evaluator import AdditionEvaluator
+from .policy import MNIST_Generate_Policy
+from .task import MNIST_Generate_Task
+from .evaluator import MNIST_Generate_Evaluator
 
 
-def addition_run(config, log, search_iter: Optional[int] = None):
-    """Running an ES loop on Addition task."""
+def mnist_generate_run(config, log, search_iter: Optional[int] = None):
+    """Running an ES loop on MNIST classification task."""
     # 1. Create placeholder env to get number of actions for policy init
-    policy = AdditionPolicy(hidden_dims=config.model_config.num_hidden_units)
+    policy = MNIST_Generate_Policy(
+        num_hidden_units=config.model_config.num_hidden_units,
+        num_vae_latents=config.model_config.num_vae_latents,
+    )
 
     # 2. Define train/test task based on configs/eval settings
-    train_task = AdditionTask(
-        config.task_config.batch_size,
-        seq_length=config.task_config.seq_length,
-        seed_id=config.seed_id,  # Fix seed for data generation
-        test=False,
+    train_task = MNIST_Generate_Task(
+        config.env_name, config.task_config.batch_size, test=False
     )
-    test_task = AdditionTask(
-        10000,
-        seq_length=config.task_config.seq_length,
-        seed_id=config.seed_id,  # Fix seed for data generation
-        test=True,
-    )
+    test_task = MNIST_Generate_Task(config.env_name, 0, test=True)
 
     # 3. Setup task evaluator with strategy and policy
-    evaluator = AdditionEvaluator(
+    evaluator = MNIST_Generate_Evaluator(
         policy=policy,
         train_task=train_task,
         test_task=test_task,
@@ -42,5 +37,4 @@ def addition_run(config, log, search_iter: Optional[int] = None):
     evaluator.run(config.num_generations, config.eval_every_gen)
 
     # 5. Return mean params and final performance
-    # NOTE:
     return evaluator.fitness_eval, evaluator.solution_eval

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional
 import chex
 import jax
 import jax.numpy as jnp
@@ -8,7 +8,7 @@ class BatchLoader:
     def __init__(
         self,
         X: chex.Array,
-        y: chex.Array,
+        y: Optional[chex.Array],
         batch_size: int,
     ):
         self.X = X
@@ -25,7 +25,10 @@ class BatchLoader:
             (self.batch_size,),
             replace=False,
         )
-        return (
-            jnp.take(self.X, sample_idx, axis=0),
-            jnp.take(self.y, sample_idx, axis=0),
-        )
+        if self.y is None:
+            return jnp.take(self.X, sample_idx, axis=0)
+        else:
+            return (
+                jnp.take(self.X, sample_idx, axis=0),
+                jnp.take(self.y, sample_idx, axis=0),
+            )

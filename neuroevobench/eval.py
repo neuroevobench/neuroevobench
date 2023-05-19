@@ -1,7 +1,7 @@
 import os
 import pickle
-import copy
 from mle_toolbox import load_result_logs
+from mle_hyperopt.utils import load_yaml
 from neuroevobench.problems import neb_eval_loops
 
 
@@ -23,10 +23,9 @@ def neb_best_eval(config, log):
                 )
 
     # Load meta and hyper log - extract best parameters
-    with open(search_fname, "rb") as file:
-        loaded_params = pickle.load(file)
+    loaded_params = load_yaml(search_fname)["config"]
 
-    print(f"Loaded parameters: {search_fname}")
+    print(f"Loaded parameters for {config.strategy_name}: {search_fname}")
     print(loaded_params)
     # Augment the default params with the best search parameters
     eval_config = copy.deepcopy(config)

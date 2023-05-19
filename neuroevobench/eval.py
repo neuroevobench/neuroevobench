@@ -1,11 +1,12 @@
 import os
 import pickle
+import copy
 from mle_toolbox import load_result_logs
 from neuroevobench.problems import neb_eval_loops
 
 
 def neb_best_eval(config, log):
-    """Run a random search over EO algorithm parameters/config."""
+    """Load best search config and run evaluation again."""
     meta_log, hyper_log = load_result_logs(config.results_dir)
 
     run_id = hyper_log.filter(

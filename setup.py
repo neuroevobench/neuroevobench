@@ -80,6 +80,7 @@ setup(
         "console_scripts": [
             "neb-search=neuroevobench.search:mle_neb_search",
             "neb-eval=neuroevobench.eval:mle_neb_eval",
+            "neb-run=neuroevobench.eval:mle_neb_run",
         ]
     },
 )

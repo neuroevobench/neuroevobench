@@ -6,9 +6,6 @@ from flax import linen as nn
 from flax.struct import dataclass
 from evojax.task.base import VectorizedTask
 from evojax.task.base import TaskState
-
-import tensorflow as tf
-import tensorflow_datasets as tfds
 from ..utils import BatchLoader
 
 
@@ -26,8 +23,8 @@ def binary_cross_entropy_with_logits(logits, labels):
 
 
 def loss_fn(recon_x, mean, logvar, batch):
-    bce_loss = binary_cross_entropy_with_logits(recon_x, batch).mean()
-    kld_loss = kl_divergence(mean, logvar).mean()
+    bce_loss = jnp.nanmean(binary_cross_entropy_with_logits(recon_x, batch))
+    kld_loss = jnp.nanmean(kl_divergence(mean, logvar))
     loss = bce_loss + kld_loss
     return loss
 
@@ -80,13 +77,16 @@ class MNIST_Generate_Task(VectorizedTask):
         return self._step_fn(state, action)
 
 
-def prepare_image(x):
-    x = tf.cast(x["image"], tf.float32)
-    x = tf.reshape(x, (-1,))
-    return x
-
-
 def get_binarized_mnist_data(test: bool = False):
+    """Get binarized MNIST data."""
+    import tensorflow as tf
+    import tensorflow_datasets as tfds
+
+    def prepare_image(x):
+        x = tf.cast(x["image"], tf.float32)
+        x = tf.reshape(x, (-1,))
+        return x
+
     ds_builder = tfds.builder("binarized_mnist")
     ds_builder.download_and_prepare()
     if not test:

@@ -1,6 +1,6 @@
 import os
 import copy
-import yaml
+import pickle
 from mle_hyperopt import RandomSearch
 from neuroevobench.problems import neb_eval_loops
 from neuroevobench.hyperparams import HyperSpace
@@ -50,8 +50,10 @@ def neb_search_loop(config, log):
 
     # Store best EO configuration in file - best_config.yaml
     _, best_config, _, _ = hyper_strategy.get_best()
-    with open(os.path.join(log.experiment_dir, "best_config.yaml"), "w") as f:
-        yaml.dump(best_config, f, default_flow_style=False)
+
+    # Store both performance and configuration in a pickle file
+    with open(os.path.join(log.experiment_dir, "best_config.pkl"), "wb") as f:
+        pickle.dump(best_config, f)
 
 
 def mle_neb_search():

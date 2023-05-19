@@ -58,7 +58,7 @@ def reparameterize(rng, mean, logvar):
 
 
 class MNIST_Generate_Policy(PolicyNetwork):
-    """A convolutional neural network for the MNIST classification task."""
+    """A MLP neural network for the MNIST generation task."""
 
     def __init__(
         self,

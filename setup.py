@@ -40,12 +40,12 @@ requires = [
     "evosax",
     "evojax",
     "gymnax",
-    "brax",
     "tensorflow",
     "tensorflow_datasets",
     "mle-toolbox[full]",
     "xgboost",
     "wandb",
+    "brax",
     "envpool",
     "torch==1.13.1",
     "torchvision==0.14.1",
@@ -78,7 +78,8 @@ setup(
     tests_requre=[],
     entry_points={
         "console_scripts": [
-            "neb=neuroevobench.search:mle_neb_search",
+            "neb-search=neuroevobench.search:mle_neb_search",
+            "neb-eval=neuroevobench.eval:mle_neb_eval",
         ]
     },
 )

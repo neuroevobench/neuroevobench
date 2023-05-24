@@ -1,1 +1,2 @@
 include neuroevobench/hyperparams/search_spaces/*.yaml
+include neuroevobench/hyperparams/default/*.yaml

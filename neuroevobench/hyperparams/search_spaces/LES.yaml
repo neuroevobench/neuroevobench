@@ -1,5 +1,5 @@
 real:
   sigma_init:
-    begin: 0.001
+    begin: 0.01
     end: 0.15
     prior: "uniform"

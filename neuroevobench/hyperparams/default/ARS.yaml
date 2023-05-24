@@ -1,0 +1,6 @@
+sigma_init: 0.001
+lrate_init: 0.005
+opt_name: adam
+fitness_trafo: centered_rank
+lrate_decay: 0.999
+sigma_decay: 0.999

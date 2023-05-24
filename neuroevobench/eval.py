@@ -1,5 +1,5 @@
 import os
-import pickle
+import copy
 from mle_toolbox import load_result_logs
 from mle_hyperopt.utils import load_yaml
 from neuroevobench.problems import neb_eval_loops
@@ -15,7 +15,7 @@ def neb_best_eval(config, log):
 
     # Get all yaml files in the experiment directory
     for file in os.listdir(meta_log[run_id].meta.experiment_dir):
-        if file.endswith(".pkl"):
+        if file.endswith(".yaml"):
             # Check if "search" is in file name
             if "best_config" in file:
                 search_fname = os.path.join(
@@ -23,7 +23,7 @@ def neb_best_eval(config, log):
                 )
 
     # Load meta and hyper log - extract best parameters
-    loaded_params = load_yaml(search_fname)["config"]
+    loaded_params = load_yaml(search_fname, keys_to_list=False)["config"]
 
     print(f"Loaded parameters for {config.strategy_name}: {search_fname}")
     print(loaded_params)

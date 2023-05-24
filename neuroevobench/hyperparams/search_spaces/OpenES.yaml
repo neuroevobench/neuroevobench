@@ -1,6 +1,6 @@
 real:
   sigma_init:
-    begin: 0.001
+    begin: 0.01
     end: 0.15
     prior: "uniform"
   lrate_init:
@@ -10,12 +10,8 @@ real:
 categorical:
   opt_name:
     - adam
-    - sgd
-    - clipup
   fitness_trafo:
     - centered_rank
-    - z_score
-    - raw
   lrate_decay:
     - 0.999
   sigma_decay:

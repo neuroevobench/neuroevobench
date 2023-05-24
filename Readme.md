@@ -22,7 +22,7 @@ from neuroevobench.problems.cifar import CifarPolicy
 from neuroevobench.problems.cifar import CifarTask
 from neuroevobench.problems.cifar import CifarEvaluator
 
-# 1. Create placeholder env to get number of actions for policy init
+# 1. Create policy for task (CNN classifier)
 policy = CifarPolicy()
 
 # 2. Define train/test task based on configs/eval settings

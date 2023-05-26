@@ -43,6 +43,23 @@ def neb_search_loop(config, log):
             os.path.join(log.experiment_dir, log_name + ".yaml")
         )
 
+        try:
+            # Store best EO configuration in file - best_config.yaml
+            _, best_config, best_perf, _ = hyper_strategy.get_best()
+
+            # Store both performance and configuration in a pickle file
+            save_fname = os.path.join(log.experiment_dir, "best_config.yaml")
+            best_store = {"performance": best_perf, "config": best_config}
+            save_yaml(best_store, save_fname)
+        except Exception as e:
+            pass
+
+    # Create a plot of evolution of best configuration over search
+    hyper_strategy.plot_best(
+        os.path.join(log.experiment_dir, log_name + ".png")
+    )
+
+    try:
         # Store best EO configuration in file - best_config.yaml
         _, best_config, best_perf, _ = hyper_strategy.get_best()
 
@@ -50,11 +67,8 @@ def neb_search_loop(config, log):
         save_fname = os.path.join(log.experiment_dir, "best_config.yaml")
         best_store = {"performance": best_perf, "config": best_config}
         save_yaml(best_store, save_fname)
-
-    # Create a plot of evolution of best configuration over search
-    hyper_strategy.plot_best(
-        os.path.join(log.experiment_dir, log_name + ".png")
-    )
+    except Exception as e:
+        pass
 
 
 def mle_neb_search():

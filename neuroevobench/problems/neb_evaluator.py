@@ -106,7 +106,7 @@ class NeuroevolutionEvaluator(object):
                 stats_tic = {
                     "mean_pop_perf": float(fitness.mean()),
                     "max_pop_perf": float(fitness.max()),
-                    "min_pop_perf": float(fitness.max()),
+                    "min_pop_perf": float(fitness.min()),
                     "best_pop_perf": float(best_perf),
                     "test_eval_perf": float(mean_es_perf),
                     "best_eval_perf": float(best_member_perf),

@@ -16,11 +16,15 @@ def brax_run(config, log, search_iter: Optional[int] = None):
         output_dim=env.action_size,
         hidden_dims=config.model_config.num_hidden_layers
         * [config.model_config.num_hidden_units],
+        hidden_act_fn=config.model_config.hidden_act_fn,
     )
 
     # 2. Define train/test task based on configs/eval settings
     train_task = BraxTask(
-        config.env_name, config.task_config.max_steps, test=False
+        config.env_name,
+        config.task_config.max_steps,
+        config.task_config.noise_level,
+        test=False,
     )
     test_task = BraxTask(
         config.env_name, config.task_config.max_steps, test=True

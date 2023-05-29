@@ -1,22 +1,22 @@
 train_config:
   num_generations: 2000
   eval_every_gen: 50
-  strategy_name: "OpenES"
-  popsize: 1024
-  env_name: "ant"
+  strategy_name: "LGA"
+  popsize: 256
+  env_name: "ur5e"
   task_config:
-    max_steps: 1000
-    num_evals_per_member: 1
+    max_steps: 500
+    num_evals_per_member: 8
+    noise_level: 0.0
   model_config:
-    num_hidden_layers: 4
+    num_hidden_layers: 2
     num_hidden_units: 32
+    hidden_act_fn: tanh
   es_params:
-    sigma_init: 0.05
     init_min: 0.0
     init_max: 0.0
   es_config:
-    lrate_init: 0.01
-    centered_rank: true
+    sigma_init: 0.05
 
 log_config:
   time_to_track: ["num_gens"]

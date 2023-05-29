@@ -36,17 +36,21 @@ class CSV_Logger(object):
         verbose: bool = True,
     ):
         """Store data in csv format / pandas dataframe."""
-        combine_dict = {**time_tic, **stats_tic}
+        combine_dict = pd.DataFrame([{**time_tic, **stats_tic}])
         if self.update_counter == 0:
-            self.data_df = pd.DataFrame([combine_dict])
+            self.data_df = combine_dict
         else:
-            self.data_df = self.data_df.append(combine_dict, ignore_index=True)
+            self.data_df = pd.concat(
+                [self.data_df, combine_dict], ignore_index=True
+            )
+
         self.update_counter += 1
 
-        if verbose:
-            print(combine_dict)
         if save:
             filepath = Path(self.log_dir + "log.csv")
             filepath.parent.mkdir(parents=True, exist_ok=True)
             self.data_df.to_csv(filepath)
-            print(f"Stored data at: {self.log_dir + 'log.csv'}")
+            if self.update_counter == 1:
+                print(f"Stored data at: {self.log_dir + 'log.csv'}")
+        if verbose:
+            print(combine_dict)

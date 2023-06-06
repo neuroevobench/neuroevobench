@@ -20,7 +20,7 @@ def yaml_log_to_pd(fname: str):
     return df
 
 
-def filter_log(
+def filter_best(
     hyper_log,
     meta_log,
     strategy_name: str,
@@ -53,6 +53,7 @@ def filter_log(
             sub_log = log[run_ids]
             time = meta_log[run_id].time.num_gens[run_ids]
             max_score_run = sub_log.max()
+            # print(max_score_run, best_score)
             if max_score_run > best_score:
                 best_score = sub_log.max()
                 best_s_id = i
@@ -60,7 +61,8 @@ def filter_log(
                 best_time = time
             max_scores.append(max_score_run)
         except Exception as e:
-            print(f"{i} failed: {e}")
+            # print(f"{i}, {strategy_name}, failed: {e}")
+            pass
 
     # Get the best hyperparameters
     best_hypers = search_log[search_log["eval_id"] == best_s_id]["params"].iloc[
@@ -74,3 +76,44 @@ def filter_log(
         "max_scores": np.array(max_scores),
         "time": best_time,
     }
+
+
+def get_search_history(
+    hyper_log,
+    meta_log,
+    strategy_name: str,
+    metric: str,
+    num_search_iters: int = 50,
+):
+    """Combine all hyperparameters and corresponding performance."""
+    run_id = hyper_log.filter({"strategy_name": strategy_name}).run_id.iloc[0]
+    search_iters = meta_log[run_id].time.iter_id
+    log = meta_log[run_id].stats[metric].mean
+
+    # Get all yaml files in the experiment directory
+    for file in os.listdir(
+        os.path.join("../", meta_log[run_id].meta.experiment_dir)
+    ):
+        if file.endswith(".yaml"):
+            # Check if "search" is in file name
+            if "search" in file:
+                search_fname = os.path.join(
+                    "../", meta_log[run_id].meta.experiment_dir, file
+                )
+
+    # Loop over all evals and find the best one
+    all_scores = []
+    best_score = -10e10
+    for i in range(num_search_iters):
+        try:
+            run_ids = search_iters == i
+            sub_log = log[run_ids]
+            max_score_run = sub_log.max()
+            if max_score_run > best_score:
+                best_score = sub_log.max()
+            all_scores.append(best_score)
+        except Exception as e:
+            # print(f"{i}, {strategy_name}, failed: {e}")
+            pass
+
+    return np.array(all_scores)

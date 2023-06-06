@@ -5,6 +5,7 @@ import jax.numpy as jnp
 from functools import partial
 import jax
 import torch
+import time
 from torchvision import datasets, transforms
 
 
@@ -60,25 +61,32 @@ def loss_and_acc(
 
 def get_cifar_data(batch_size: int, test: bool = False):
     """Get PyTorch Data Loaders for CIFAR-10."""
-    transform = transforms.Compose(
-        [
-            transforms.ToTensor(),
-            transforms.Normalize(
-                (0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)
-            ),
-            transforms.Lambda(lambda x: x.permute(1, 2, 0)),
-        ]
-    )
+    while True:
+        try:
+            transform = transforms.Compose(
+                [
+                    transforms.ToTensor(),
+                    transforms.Normalize(
+                        (0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)
+                    ),
+                    transforms.Lambda(lambda x: x.permute(1, 2, 0)),
+                ]
+            )
 
-    loader = torch.utils.data.DataLoader(
-        datasets.CIFAR10(
-            root="~/data",
-            train=not test,
-            download=True,
-            transform=transform,
-        ),
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=4,
-    )
+            loader = torch.utils.data.DataLoader(
+                datasets.CIFAR10(
+                    root="~/data",
+                    train=not test,
+                    download=True,
+                    transform=transform,
+                ),
+                batch_size=batch_size,
+                shuffle=True,
+                num_workers=4,
+            )
+            print("Loaded CIFAR Data")
+            break
+        except Exception:
+            time.sleep(1)
+            continue
     return loader

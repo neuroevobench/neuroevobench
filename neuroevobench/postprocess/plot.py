@@ -118,3 +118,35 @@ def plot_sensitivity(
     if plot_ylabel:
         ax.set_ylabel(ylabel)
     return
+
+
+def plot_history(
+    results_dict,
+    fig=None,
+    ax=None,
+    title: str = "Hyperparameter Search - Best Test Scores",
+    xlabel: str = "# Search Iterations",
+    ylabel: str = "Performance",
+    plot_ylabel: bool = True,
+    plot_xlabel: bool = True,
+    plot_legend: bool = True,
+    colors: list = ["r", "g", "b", "yellow", "k"],
+):
+    """Hyperparameter sensitivity - best test scores."""
+    if fig is None or ax is None:
+        fig, ax = plt.subplots()
+
+    for k, v in results_dict.items():
+        ax.plot(v, label=k, c=colors[k])
+
+    ax.set_title(title)
+    if plot_legend:
+        ax.legend(loc=0, fontsize=18, ncol=2)
+    if plot_xlabel:
+        ax.set_xlabel(xlabel)
+        ax.set_xticklabels(ax.get_xticklabels(), fontsize=30)
+    else:
+        ax.set_xticks([])
+    if plot_ylabel:
+        ax.set_ylabel(ylabel)
+    return

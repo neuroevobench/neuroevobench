@@ -1,6 +1,6 @@
 train_config:
-  num_generations: 2000
-  eval_every_gen: 50
+  num_generations: 1500
+  eval_every_gen: 100
   strategy_name: "OpenES"
   popsize: 256
   env_name: "Asterix-MinAtar"

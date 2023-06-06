@@ -24,6 +24,7 @@ class State(TaskState):
     state: Any
     obs: jnp.ndarray
     rng: chex.PRNGKey
+    noise: jnp.ndarray
 
 
 def get_state_dataclass(**states):
@@ -67,7 +68,11 @@ class BraxTask(VectorizedTask):
 
         def reset_fn(key):
             state = brax_env.reset(key)
-            state = get_state_dataclass(state=state, obs=state.obs, rng=key)
+            rng, rng_noise = jax.random.split(key)
+            noise = jax.random.normal(rng_noise, shape=())
+            state = get_state_dataclass(
+                state=state, obs=state.obs, rng=rng, noise=noise
+            )
             return state
 
         self._reset_fn = jax.jit(jax.vmap(reset_fn))
@@ -75,10 +80,12 @@ class BraxTask(VectorizedTask):
         def step_fn(state, action):
             brax_state = brax_env.step(state.state, action)
             if self.use_noise:
-                rng, rng_noise = jax.random.split(state.rng)
-                reward_noise = jax.random.normal(
-                    rng_noise, shape=brax_state.reward.shape
-                )
+                # rng, rng_noise = jax.random.split(state.rng)
+                # reward_noise = jax.random.normal(
+                #     rng_noise, shape=brax_state.reward.shape
+                # )
+                rng = state.rng
+                reward_noise = state.noise
             else:
                 rng = state.rng
                 reward_noise = 0.0

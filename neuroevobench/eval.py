@@ -29,7 +29,11 @@ def neb_best_eval(config, log):
     print(loaded_params)
     # Augment the default params with the best search parameters
     eval_config = copy.deepcopy(config)
+    # Don't overwrite fitness trafo if explictly set in config
+    use_fit_trafo = "fitness_trafo" in config.es_config.keys()
     for k, v in loaded_params.items():
+        if use_fit_trafo and k == "fitness_trafo":
+            continue
         eval_config.es_config[k] = v
     # Evaluate the parameter config by running a ES loop
     # NOTE: Seed id is passed via eval_config

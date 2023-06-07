@@ -139,9 +139,13 @@ def plot_history(
     for k, v in results_dict.items():
         ax.plot(v, label=k, c=colors[k])
 
+    # Add vertical lines to plot after 10, 40 trials
+    ax.axvline(20, ls="--", alpha=0.75, c="grey")
+    ax.axvline(40, ls="--", alpha=0.75, c="grey")
+
     ax.set_title(title)
     if plot_legend:
-        ax.legend(loc=0, fontsize=18, ncol=2)
+        ax.legend(loc=0, fontsize=16, ncol=2)
     if plot_xlabel:
         ax.set_xlabel(xlabel)
         ax.set_xticklabels(ax.get_xticklabels(), fontsize=30)

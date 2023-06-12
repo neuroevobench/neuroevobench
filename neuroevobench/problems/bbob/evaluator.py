@@ -1,5 +1,6 @@
-from typing import List
+from typing import List, Optional, Any
 import jax
+import jax.numpy as jnp
 from evosax.problems import BBOBFitness
 
 
@@ -46,6 +47,10 @@ class BBOBEvaluator(object):
         num_eval_runs: int = 50,
         fct_to_eval: List[str] = bbob_fns,
         seed_id: int = 0,
+        log: Optional[Any] = None,
+        time_tick_str: str = "num_gens",
+        iter_id: Optional[int] = None,
+        maximize_objective: bool = True,
     ):
         self.popsize = popsize
         self.num_dims = num_dims
@@ -55,6 +60,11 @@ class BBOBEvaluator(object):
         self.num_eval_runs = num_eval_runs
         self.fct_to_eval = fct_to_eval
         self.seed_id = seed_id
+
+        self.log = log
+        self.time_tick_str = time_tick_str
+        self.iter_id = iter_id
+        self.maximize_objective = maximize_objective
         self.setup()
 
     def setup(self):
@@ -67,9 +77,9 @@ class BBOBEvaluator(object):
         )
         self.es_params = self.strategy.default_params.replace(**self.es_params)
 
-    def run(self, num_generations, log=None):
+    def run(self, num_generations: int):
         """Run evolution loop with logging."""
-        print(f"START EVOLVING {self.num_dims} PARAMETERS.")
+        print(f"BBOB: START EVOLVING {self.num_dims} PARAMETERS.")
         mean_perf, best_perf = eval_bbob_sweep(
             self.strategy,
             self.num_dims,
@@ -79,14 +89,21 @@ class BBOBEvaluator(object):
             self.fct_to_eval,
             self.seed_id,
         )
-        if log is not None:
-            log.update(
-                {"num_gens": 1},
-                {**mean_perf, **best_perf},
-                save=True,
-            )
+        time_tic = {self.time_tick_str: num_generations}
+        if self.iter_id is not None:
+            time_tic["iter_id"] = self.iter_id
+        stats_tic = {**mean_perf, **best_perf}
+        self.update_log(time_tic, stats_tic)
+
+        self.fitness_eval = -float(jnp.array(list(mean_perf.values())).mean())
+        self.solution_eval = None
+
+    def update_log(self, time_tic, stats_tic, model: Optional[Any] = None):
+        """Update logger with newest data."""
+        if self.log is not None:
+            self.log.update(time_tic, stats_tic, model=model, save=True)
         else:
-            print(mean_perf, best_perf)
+            print(time_tic, stats_tic)
 
 
 def eval_bbob_sweep(

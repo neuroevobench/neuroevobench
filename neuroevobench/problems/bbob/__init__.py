@@ -1,3 +1,4 @@
-from .bbob_evaluator import BBOBEvaluator
+from .wrapped import bbob_run
+from .evaluator import BBOBEvaluator
 
-__all__ = ["BBOBEvaluator"]
+__all__ = ["bbob_run", "BBOBEvaluator"]

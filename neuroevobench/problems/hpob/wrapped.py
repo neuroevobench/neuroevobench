@@ -1,8 +1,8 @@
 from evosax import Strategies
-from neuroevobench.problems.hpob import HPOBEvaluator
+from .evaluator import HPOBEvaluator
 
 
-def main(config, log):
+def hpob_run(config, log):
     """Running an ES loop on HPO task."""
     # 1. Setup task evaluator with strategy
     evaluator = HPOBEvaluator(
@@ -14,14 +14,7 @@ def main(config, log):
     )
 
     # 2. Run the ES loop with logging
-    evaluator.run(
-        config.num_generations,
-    )
+    evaluator.run(config.num_generations)
 
-
-if __name__ == "__main__":
-    from mle_toolbox import MLExperiment
-
-    # Setup experiment run (visible GPUs for JAX parallelism)
-    mle = MLExperiment(config_fname="configs/train.yaml")
-    main(mle.train_config, mle.log)
+    # 3. Return mean params and final performance
+    return evaluator.fitness_eval, evaluator.solution_eval

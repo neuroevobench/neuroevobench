@@ -79,7 +79,7 @@ class BBOBEvaluator(object):
 
     def run(self, num_generations: int):
         """Run evolution loop with logging."""
-        print(f"BBOB: START EVOLVING {self.num_dims} PARAMETERS.")
+        print(f"bbob: START EVOLVING {self.num_dims} PARAMETERS.")
         mean_perf, best_perf = eval_bbob_sweep(
             self.strategy,
             self.num_dims,
@@ -92,11 +92,16 @@ class BBOBEvaluator(object):
         time_tic = {self.time_tick_str: num_generations}
         if self.iter_id is not None:
             time_tic["iter_id"] = self.iter_id
-        stats_tic = {**mean_perf, **best_perf}
-        self.update_log(time_tic, stats_tic)
 
         self.fitness_eval = -float(jnp.array(list(mean_perf.values())).mean())
         self.solution_eval = None
+
+        stats_tic = {
+            "test_eval_perf": self.fitness_eval,
+            **mean_perf,
+            **best_perf,
+        }
+        self.update_log(time_tic, stats_tic)
 
     def update_log(self, time_tic, stats_tic, model: Optional[Any] = None):
         """Update logger with newest data."""

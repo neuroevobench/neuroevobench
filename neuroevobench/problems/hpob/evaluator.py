@@ -1,7 +1,8 @@
+from typing import Optional, Any
 import os
 import numpy as np
-from .hpob_wrapper import Evosax2HPO_Wrapper
-from .hpob_task import HPOBTask
+from .eo_wrapper import Evosax2HPO_Wrapper
+from .task import HPOBTask
 
 
 class HPOBEvaluator(object):
@@ -12,12 +13,20 @@ class HPOBEvaluator(object):
         es_config={},
         es_params={},
         seed_id: int = 0,
+        log: Optional[Any] = None,
+        time_tick_str: str = "num_gens",
+        iter_id: Optional[int] = None,
+        maximize_objective: bool = True,
     ):
         self.popsize = popsize
         self.es_strategy = es_strategy
         self.es_config = es_config
         self.es_params = es_params
         self.seed_id = seed_id
+        self.log = log
+        self.time_tick_str = time_tick_str
+        self.iter_id = iter_id
+        self.maximize_objective = maximize_objective
         self.setup()
 
     def setup(self):
@@ -30,24 +39,31 @@ class HPOBEvaluator(object):
             seed=self.seed_id,
         )
 
-    def run(self, num_generations, log=None):
+    def run(self, num_generations: int):
         """Run evolution loop with logging."""
-        print(f"START EVOLVING HPOB PARAMETERS.")
+        print("hpob: START EVOLVING HPOB PARAMETERS.")
         # Run ES Loop on HPO tasks -> Return mean timeseries across all tasks
         mean_perf, mean_steps = eval_cont_hbo_sweep(
             self.strategy, num_generations
         )
 
-        if log is not None:
-            # Loop over all mean results and return performance
-            for g in range(mean_perf.shape[0]):
-                log.update(
-                    {"num_gens": g + 1, "num_evals": mean_steps[g]},
-                    {"test_perf": mean_perf[g]},
-                    save=True,
-                )
+        # Loop over all mean results and return performance
+        for g in range(mean_perf.shape[0]):
+            time_tic = {self.time_tick_str: g}
+            if self.iter_id is not None:
+                time_tic["iter_id"] = self.iter_id
+            stats_tic = {"test_eval_perf": mean_perf[g]}
+            self.update_log(time_tic, stats_tic)
+
+        self.fitness_eval = float(mean_perf[-1])
+        self.solution_eval = None
+
+    def update_log(self, time_tic, stats_tic, model: Optional[Any] = None):
+        """Update logger with newest data."""
+        if self.log is not None:
+            self.log.update(time_tic, stats_tic, model=model, save=True)
         else:
-            print(mean_perf)
+            print(time_tic, stats_tic)
 
 
 def eval_cont_hbo_sweep(

@@ -70,7 +70,10 @@ class NeuroevolutionEvaluator(object):
 
     def run(self, num_generations: int, eval_every_gen: int):
         """Run evolution loop with logging."""
-        print(f"START EVOLVING {self.strategy.num_dims} PARAMETERS.")
+        print(
+            f"{self.problem_type}: START EVOLVING"
+            f" {self.strategy.num_dims} PARAMETERS."
+        )
         # Run very first evaluation using self.es_state
         mean_es_perf, best_member_perf = self.evaluate_perf()
         time_tic = {self.time_tick_str: 0}

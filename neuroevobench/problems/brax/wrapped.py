@@ -1,11 +1,16 @@
 from typing import Optional
-from evosax import Strategies
+from evosax import Strategies, Strategy
 from .policy import BraxPolicy
 from .task import BraxTask
 from .evaluator import BraxEvaluator
 
 
-def brax_run(config, log, search_iter: Optional[int] = None):
+def brax_run(
+    config,
+    log,
+    search_iter: Optional[int] = None,
+    strategy_class: Optional[Strategy] = None,
+):
     """Running an ES loop on Brax task."""
     from brax.v1.envs import create
 
@@ -31,12 +36,17 @@ def brax_run(config, log, search_iter: Optional[int] = None):
     )
 
     # 3. Setup task evaluator with strategy and policy
+    if strategy_class is not None:
+        base_strategy = strategy_class
+    else:
+        base_strategy = Strategies[config.strategy_name]
+
     evaluator = BraxEvaluator(
         policy=policy,
         train_task=train_task,
         test_task=test_task,
         popsize=config.popsize,
-        es_strategy=Strategies[config.strategy_name],
+        es_strategy=base_strategy,
         es_config=config.es_config,
         es_params=config.es_params,
         num_evals_per_member=config.task_config.num_evals_per_member,

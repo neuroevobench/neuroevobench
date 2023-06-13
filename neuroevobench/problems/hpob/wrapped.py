@@ -1,16 +1,29 @@
-from evosax import Strategies
+from typing import Optional
+from evosax import Strategies, Strategy
 from .evaluator import HPOBEvaluator
 
 
-def hpob_run(config, log):
+def hpob_run(
+    config,
+    log,
+    search_iter: Optional[int] = None,
+    strategy_class: Optional[Strategy] = None,
+):
     """Running an ES loop on HPO task."""
     # 1. Setup task evaluator with strategy
+    if strategy_class is not None:
+        base_strategy = strategy_class
+    else:
+        base_strategy = Strategies[config.strategy_name]
+
     evaluator = HPOBEvaluator(
         popsize=config.popsize,
-        es_strategy=Strategies[config.strategy_name],
+        es_strategy=base_strategy,
         es_config=config.es_config,
         es_params=config.es_params,
         seed_id=config.seed_id,
+        log=log,
+        iter_id=search_iter,
     )
 
     # 2. Run the ES loop with logging

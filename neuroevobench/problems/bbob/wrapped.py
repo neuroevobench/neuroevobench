@@ -1,15 +1,25 @@
 from typing import Optional
-from evosax import Strategies
+from evosax import Strategies, Strategy
 from .evaluator import BBOBEvaluator
 
 
-def bbob_run(config, log, search_iter: Optional[int] = None):
+def bbob_run(
+    config,
+    log,
+    search_iter: Optional[int] = None,
+    strategy_class: Optional[Strategy] = None,
+):
     """Running an ES loop on BBOB task."""
     # 1. Setup task evaluator with strategy
+    if strategy_class is not None:
+        base_strategy = strategy_class
+    else:
+        base_strategy = Strategies[config.strategy_name]
+
     evaluator = BBOBEvaluator(
         popsize=config.popsize,
         num_dims=config.num_dims,
-        es_strategy=Strategies[config.strategy_name],
+        es_strategy=base_strategy,
         es_config=config.es_config,
         es_params=config.es_params,
         num_eval_runs=config.num_eval_runs,

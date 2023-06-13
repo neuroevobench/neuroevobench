@@ -1,11 +1,16 @@
 from typing import Optional
-from evosax import Strategies
+from evosax import Strategies, Strategy
 from .policy import SMNISTPolicy
 from .task import SMNISTTask
 from .evaluator import SMNISTEvaluator
 
 
-def smnist_run(config, log, search_iter: Optional[int] = None):
+def smnist_run(
+    config,
+    log,
+    search_iter: Optional[int] = None,
+    strategy_class: Optional[Strategy] = None,
+):
     # 1. Create placeholder env to get number of actions for policy init
     policy = SMNISTPolicy(hidden_dims=config.model_config.num_hidden_units)
 
@@ -24,12 +29,17 @@ def smnist_run(config, log, search_iter: Optional[int] = None):
     )
 
     # 3. Setup task evaluator with strategy and policy
+    if strategy_class is not None:
+        base_strategy = strategy_class
+    else:
+        base_strategy = Strategies[config.strategy_name]
+
     evaluator = SMNISTEvaluator(
         policy=policy,
         train_task=train_task,
         test_task=test_task,
         popsize=config.popsize,
-        es_strategy=Strategies[config.strategy_name],
+        es_strategy=base_strategy,
         es_config=config.es_config,
         es_params=config.es_params,
         seed_id=config.seed_id,

@@ -1,11 +1,16 @@
 from typing import Optional
-from evosax import Strategies
+from evosax import Strategies, Strategy
 from .policy import SVHNPolicy
 from .task import SVHNTask
 from .evaluator import SVHNEvaluator
 
 
-def svhn_run(config, log, search_iter: Optional[int] = None):
+def svhn_run(
+    config,
+    log,
+    search_iter: Optional[int] = None,
+    strategy_class: Optional[Strategy] = None,
+):
     """Running an ES loop on SVHN task."""
     # 1. Create placeholder env to get number of actions for policy init
     policy = SVHNPolicy(config.model_config.resnet_no)
@@ -15,12 +20,17 @@ def svhn_run(config, log, search_iter: Optional[int] = None):
     test_task = SVHNTask(12000, test=True)
 
     # 3. Setup task evaluator with strategy and policy
+    if strategy_class is not None:
+        base_strategy = strategy_class
+    else:
+        base_strategy = Strategies[config.strategy_name]
+
     evaluator = SVHNEvaluator(
         policy=policy,
         train_task=train_task,
         test_task=test_task,
         popsize=config.popsize,
-        es_strategy=Strategies[config.strategy_name],
+        es_strategy=base_strategy,
         es_config=config.es_config,
         es_params=config.es_params,
         seed_id=config.seed_id,

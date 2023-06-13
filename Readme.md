@@ -25,7 +25,7 @@ pip install neuroevobench
 
 ## Task Availability
 
-<a href="https://github.com/neuroevobench/neuroevobench/blob/main/docs/task_overview.png"><img src="https://github.com/neuroevobench/neuroevobench/blob/main/docs/task_overview.png" width="500" align="center" /></a>
+<a href="https://github.com/neuroevobench/neuroevobench/blob/main/docs/task_overview.png"><img src="https://github.com/neuroevobench/neuroevobench/blob/main/docs/task_overview.png" width="800" align="center" /></a>
 
 We provide 4 different problem classes with a total of 11 tasks. The majority of tasks are concerned with neuroevolution problems, i.e. the optimization of neural network weights. But we also provide BBOB and HPO-C task wrappers for completeness. You can also add your own tasks, e.g. have a look at the [`addition`](https://github.com/neuroevobench/neuroevobench/tree/main/neuroevobench/problems/addition) task for an easy-to-adapt example.
 

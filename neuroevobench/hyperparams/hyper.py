@@ -6,9 +6,16 @@ import pkgutil
 
 class HyperParams(object):
     def __init__(
-        self, strategy_name: str = "OpenES", params: Optional[dict] = None
+        self,
+        strategy_name: str = "OpenES",
+        params: Optional[dict] = None,
+        tuned: bool = False,
+        problem_name: str = "fetch",
     ):
-        self.base_path = "default/"
+        if not tuned:
+            self.base_path = "default/"
+        else:
+            self.base_path = f"tuned/{problem_name}"
         self.strategy_name = strategy_name
         if params is not None:
             self.params = params

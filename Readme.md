@@ -29,9 +29,9 @@ pip install neuroevobench
 
 We provide 4 different problem classes with a total of 11 tasks. The majority of tasks are concerned with neuroevolution problems, i.e. the optimization of neural network weights. But we also provide BBOB and HPO-C task wrappers for completeness. You can also add your own tasks, e.g. have a look at the [`addition`](https://github.com/neuroevobench/neuroevobench/tree/main/neuroevobench/problems/addition) task for an easy-to-adapt example.
 
-## Basic `NeuroEvoBench` Usage
+## Basic `NeuroEvoBench` Usage & Task API
 
-Each specific task requires 3 core ingredients: 
+Each specific task requires 3 core ingredients in order to be supported by `NeuroEvoBench`: 
 
 1. `Policy`: Defines the network/BBO substrate to optimize its parameters.
 2. `Task`: Defines the task (e.g. rollout of robot policy / loss evaluation of net).

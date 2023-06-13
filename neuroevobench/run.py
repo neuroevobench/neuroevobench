@@ -6,9 +6,9 @@ from neuroevobench.hyperparams import HyperParams
 def neb_run_config(config, log):
     """Run config evaluation on NEB problem."""
     # Load the strategy-specific default hyperparameters
-    hyperparams = HyperParams(config.strategy_name)
+    hyperparams = HyperParams(config.strategy_name, tuned=False)
     eval_config = copy.deepcopy(config)
-    for k, v in hyperparams.items():
+    for k, v in hyperparams.params.items():
         eval_config.es_config[k] = v
 
     # Evaluate the parameter config by running a ES loop
@@ -20,8 +20,8 @@ def neb_run_config(config, log):
     log.save_model(solution)
 
 
-def mle_neb_eval():
-    """Run search via mle interface."""
+def mle_neb_run():
+    """Run default eval via mle interface."""
     # Attempt running experiment using mle-infrastructure
     from mle_toolbox import MLExperiment
 

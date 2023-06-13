@@ -49,6 +49,7 @@ requires = [
     "envpool",
     "torch==1.13.1",
     "torchvision==0.14.1",
+    "Pillow==9.0.0",
 ]
 
 setup(

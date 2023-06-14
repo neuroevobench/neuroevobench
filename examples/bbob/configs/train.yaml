@@ -1,9 +1,9 @@
 train_config:
   strategy_name: "CMA_ES"
-  popsize: 8
-  num_dims: 2
+  popsize: 32
+  num_dims: 20
   num_eval_runs: 50  # How often to run experiment in batch mode
-  num_generations: 50
+  num_generations: 100
 
   es_params:
     sigma_init: 0.5

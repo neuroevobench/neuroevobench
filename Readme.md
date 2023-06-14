@@ -129,6 +129,62 @@ for search_iter in range(50):
 ```
 
 
+### Benchmarking Your Own Method
+
+You can also benchmark your own EO method. It only has to come with the standard `evosax` ask-tell API. E.g.
+
+```python
+from flax import struct
+from evosax import Strategy
+
+
+@struct.dataclass
+class EvoState:
+    ...
+
+@struct.dataclass
+class EvoParams:
+    ...
+
+class Your_EO_Method(Strategy):
+    def __init__(self, popsize, num_dims, pholder_params, **fitness_kwargs):
+        """Your Evolutionary Optimizer"""
+        super().__init__(...)
+
+    @property
+    def params_strategy(self) -> EvoParams:
+        """Return default parameters of evolution strategy."""
+        return EvoParams()
+
+    def initialize_strategy(self, rng, params) -> EvoState:
+        """`initialize` the evolution strategy."""
+        return EvoState(...)
+
+    def ask_strategy(self, rng, state, params):
+        """`ask` for new proposed candidates to evaluate next."""
+        x = ...
+        return x, state
+
+    def tell_strategy(self, x, fitness, state, params) -> EvoState:
+        """`tell` update to ES state."""
+        return state
+```
+
+
+You can then pass your custom EO method to the evaluation loop execution function, i.e.:
+
+```Python
+performance, solution = neb_eval_loops["bbob"](
+    eval_config,
+    log=None,
+    search_iter=search_iter,
+    strategy_class=Your_EO_Method  # Specify EO HERE
+)
+```
+
+We further provide a full example in the colab notebook [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/neuroevobench/neuroevobench/blob/main/examples/neb_introduction.ipynb).
+
+
 ### Running Distributed Parameter Search/EO Sweeps
 
 You can execute the random search sweeps, multi-seed evaluations for the best found settings and individual training runs via the following command line shortcuts:

@@ -89,13 +89,21 @@ class NeuroevolutionEvaluator(object):
         # Run evolution loop
         for gen_counter in range(1, num_generations + 1):
             self.rng, rng_ask = jax.random.split(self.rng)
+            import time
+
+            print("Start ask")
+            start_t = time.time()
             params, self.es_state = self.strategy.ask(
                 rng_ask, self.es_state, self.es_params
             )
+            print("Done", time.time() - start_t, params.shape)
             fitness = self.evaluate_pop(params)
+            print("Start tell", fitness.shape)
+            start_t = time.time()
             self.es_state = self.strategy.tell(
                 params, fitness, self.es_state, self.es_params
             )
+            print("Done", time.time() - start_t, params.shape)
 
             # TODO(RobertTLange): Fix update of best_perf -> min/max objective
             improved = best_perf < fitness.max()

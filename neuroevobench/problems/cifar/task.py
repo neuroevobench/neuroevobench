@@ -6,7 +6,13 @@ from functools import partial
 import jax
 import torch
 import time
-from torchvision import datasets, transforms
+
+try:
+    from torchvision import datasets, transforms
+except:
+    print("You need to install torchvision for Cifar tasks:")
+    print("  pip install torchvision")
+    # sys.exit(1)
 
 
 class CifarTask(object):

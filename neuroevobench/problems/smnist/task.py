@@ -4,7 +4,13 @@ import jax.numpy as jnp
 import chex
 from functools import partial
 import torch
-from torchvision import datasets, transforms
+
+try:
+    from torchvision import datasets, transforms
+except:
+    print("You need to install torchvision for SMNIST tasks:")
+    print("  pip install torchvision")
+    # sys.exit(1)
 from ..utils import BatchLoader
 
 

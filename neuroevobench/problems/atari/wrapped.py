@@ -3,6 +3,9 @@ from evosax import Strategies, Strategy
 from .policy import AtariPolicy
 from .task import AtariTask
 from .evaluator import AtariEvaluator
+from ...blines import BayesOpt
+
+Strategies["BayesOpt"] = BayesOpt
 
 try:
     import envpool

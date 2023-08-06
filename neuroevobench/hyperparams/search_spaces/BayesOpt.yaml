@@ -1,0 +1,13 @@
+real:
+  param_range:
+    begin: 0.5
+    end: 5.0
+    prior: "uniform"
+categorical:
+  n_pca_components:
+    - 0.5
+    - 0.6
+    - 0.7
+    - 0.8
+    - 0.9
+    - 1.0

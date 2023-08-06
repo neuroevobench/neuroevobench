@@ -3,6 +3,9 @@ from evosax import Strategies, Strategy
 from .policy import BraxPolicy
 from .task import BraxTask
 from .evaluator import BraxEvaluator
+from ...blines import BayesOpt
+
+Strategies["BayesOpt"] = BayesOpt
 
 
 def brax_run(

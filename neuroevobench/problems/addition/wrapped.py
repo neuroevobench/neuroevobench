@@ -3,6 +3,9 @@ from evosax import Strategies, Strategy
 from .policy import AdditionPolicy
 from .task import AdditionTask
 from .evaluator import AdditionEvaluator
+from ...blines import BayesOpt
+
+Strategies["BayesOpt"] = BayesOpt
 
 
 def addition_run(

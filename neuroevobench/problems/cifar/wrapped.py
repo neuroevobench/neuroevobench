@@ -3,6 +3,9 @@ from evosax import Strategies, Strategy
 from .policy import CifarPolicy
 from .task import CifarTask
 from .evaluator import CifarEvaluator
+from ...blines import BayesOpt
+
+Strategies["BayesOpt"] = BayesOpt
 
 
 def cifar_run(

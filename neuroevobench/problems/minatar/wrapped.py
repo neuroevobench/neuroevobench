@@ -4,6 +4,9 @@ from gymnax.wrappers.evojax import GymnaxToEvoJaxTask
 from evosax import Strategies, Strategy
 from .policy import MinAtarPolicy
 from .evaluator import MinAtarEvaluator
+from ...blines import BayesOpt
+
+Strategies["BayesOpt"] = BayesOpt
 
 
 def minatar_run(

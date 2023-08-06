@@ -3,6 +3,9 @@ from evosax import Strategies, Strategy
 from .policy import SMNISTPolicy
 from .task import SMNISTTask
 from .evaluator import SMNISTEvaluator
+from ...blines import BayesOpt
+
+Strategies["BayesOpt"] = BayesOpt
 
 
 def smnist_run(

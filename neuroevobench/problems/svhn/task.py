@@ -5,7 +5,13 @@ import jax.numpy as jnp
 from functools import partial
 import jax
 import torch
-from torchvision import datasets, transforms
+
+try:
+    from torchvision import datasets, transforms
+except:
+    print("You need to install torchvision for SVHN tasks:")
+    print("  pip install torchvision")
+    # sys.exit(1)
 from torch.utils.data import random_split
 
 

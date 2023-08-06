@@ -3,6 +3,9 @@ from evosax import Strategies, Strategy
 from .policy import MNIST_Classify_Policy
 from .task import MNIST_Classify_Task
 from .evaluator import MNIST_Classify_Evaluator
+from ...blines import BayesOpt
+
+Strategies["BayesOpt"] = BayesOpt
 
 
 def mnist_classify_run(

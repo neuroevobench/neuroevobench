@@ -6,7 +6,13 @@ from flax.struct import dataclass
 from evojax.task.base import VectorizedTask
 from evojax.task.base import TaskState
 import torch
-from torchvision import datasets, transforms
+
+try:
+    from torchvision import datasets, transforms
+except:
+    print("You need to install torchvision for MNIST tasks:")
+    print("  pip install torchvision")
+    # sys.exit(1)
 from ..utils import BatchLoader
 
 

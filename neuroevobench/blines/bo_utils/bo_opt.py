@@ -51,9 +51,9 @@ def suggest_next(
     dtypes: DataTypes,
     acq: Callable,
     popsize: int = 1,
-    n_seed: int = 1000,
+    n_seed: int = 100,
     lr: float = 0.1,
-    n_epochs: int = 150,
+    n_epochs: int = 50,
 ) -> Array:
     """
     Suggests the new point to sample by optimizing the acquisition function.

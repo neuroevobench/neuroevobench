@@ -7,9 +7,14 @@ import jax.numpy as jnp
 from flax import struct
 from evosax.core import ParameterReshaper, FitnessShaper
 from evosax.utils import get_best_fitness_member
-from .bo_utils.bo_acq import ACQ, select_acq
-from .bo_utils.bo_gp import DataTypes, GParameters, train
-from .bo_utils.bo_opt import suggest_next
+from .bo_utils import (
+    ACQ,
+    select_acq,
+    DataTypes,
+    GParameters,
+    train,
+    suggest_next,
+)
 
 Array = Any
 dtypes = DataTypes(integers=[])

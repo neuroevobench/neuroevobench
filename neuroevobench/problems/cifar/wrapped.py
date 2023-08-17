@@ -1,11 +1,11 @@
 from typing import Optional
-from evosax import Strategies, Strategy
+from evosax import Strategy
 from .policy import CifarPolicy
 from .task import CifarTask
 from .evaluator import CifarEvaluator
-from ...blines import BayesOpt
+from ...utils import collect_strategies
 
-Strategies["BayesOpt"] = BayesOpt
+Strategies = collect_strategies()
 
 
 def cifar_run(

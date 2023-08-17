@@ -1,12 +1,12 @@
 from typing import Optional
 import gymnax
 from gymnax.wrappers.evojax import GymnaxToEvoJaxTask
-from evosax import Strategies, Strategy
+from evosax import Strategy
 from .policy import MinAtarPolicy
 from .evaluator import MinAtarEvaluator
-from ...blines import BayesOpt
+from ...utils import collect_strategies
 
-Strategies["BayesOpt"] = BayesOpt
+Strategies = collect_strategies()
 
 
 def minatar_run(

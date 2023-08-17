@@ -93,6 +93,7 @@ class BBOBEvaluator(object):
         if self.iter_id is not None:
             time_tic["iter_id"] = self.iter_id
 
+        # Make performance negative for downstream maximization
         self.fitness_eval = -float(jnp.array(list(mean_perf.values())).mean())
         self.solution_eval = None
 

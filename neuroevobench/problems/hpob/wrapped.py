@@ -1,9 +1,9 @@
 from typing import Optional
-from evosax import Strategies, Strategy
+from evosax import Strategy
 from .evaluator import HPOBEvaluator
-from ...blines import BayesOpt
+from ...utils import collect_strategies
 
-Strategies["BayesOpt"] = BayesOpt
+Strategies = collect_strategies()
 
 
 def hpob_run(

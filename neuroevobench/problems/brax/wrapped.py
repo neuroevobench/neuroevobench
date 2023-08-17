@@ -1,11 +1,11 @@
 from typing import Optional
-from evosax import Strategies, Strategy
+from evosax import Strategy
 from .policy import BraxPolicy
 from .task import BraxTask
 from .evaluator import BraxEvaluator
-from ...blines import BayesOpt
+from ...utils import collect_strategies
 
-Strategies["BayesOpt"] = BayesOpt
+Strategies = collect_strategies()
 
 
 def brax_run(

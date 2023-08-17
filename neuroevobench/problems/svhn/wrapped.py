@@ -1,8 +1,11 @@
 from typing import Optional
-from evosax import Strategies, Strategy
+from evosax import Strategy
 from .policy import SVHNPolicy
 from .task import SVHNTask
 from .evaluator import SVHNEvaluator
+from ...utils import collect_strategies
+
+Strategies = collect_strategies()
 
 
 def svhn_run(

@@ -1,0 +1,12 @@
+real:
+  param_range:
+    begin: 0.5
+    end: 5.0
+    prior: "uniform"
+categorical:
+  acq_fn_name:
+    - UCB
+    - EI
+    - POI
+    - UCB
+    - LCB

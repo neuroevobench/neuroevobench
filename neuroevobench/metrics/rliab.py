@@ -20,6 +20,7 @@ def plot_rliable(
     score_dict: dict,
     agg_fn: str = "all",
     reps: int = 50000,
+    xlabel="OpenES Norm. Performance",
 ):
     """Create a rliable plot from a score dictionary."""
     if agg_fn == "median":
@@ -44,7 +45,7 @@ def plot_rliable(
         metric_names=metric_names,
         algorithms=algorithms,
         xlabel_y_coordinate=-0.16,
-        xlabel="OpenES Norm. Performance",
+        xlabel=xlabel,
     )
     fig.tight_layout()
     return fig, axes

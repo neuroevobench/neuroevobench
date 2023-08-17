@@ -1,6 +1,7 @@
 """Bayesian Optimization Wrapper to benchmark agains - not JAX compatible."""
 from typing import Optional, Union, Tuple
 import chex
+import numpy as np
 import jax
 import jax.numpy as jnp
 from flax import struct
@@ -26,7 +27,7 @@ class EvoParams:
     clip_max: float = jnp.finfo(jnp.float32).max
 
 
-class BayesOpt(object):
+class BayesOptNevergrad(object):
     def __init__(
         self,
         popsize: int,
@@ -82,11 +83,17 @@ class BayesOpt(object):
             raise ImportError(
                 "You need to install `nevergrad` to use the BO search strategy."
             )
+
+        # Turn off logging for nevergrad
+        import logging
+
+        logger = logging.getLogger("nevergrad")
+        logger.propagate = False
         dimensions = ng.p.Instrumentation(
             opt_params=ng.p.Array(
                 shape=(self.num_dims,),
-                low=params.search_min,
-                high=params.search_max,
+                lower=params.search_min,
+                upper=params.search_max,
             )
         )
         strategy_cls = BayesOptim(pca=True, n_components=self.n_pca_components)
@@ -106,10 +113,12 @@ class BayesOpt(object):
     def ask(
         self, rng: chex.PRNGKey, state: EvoState, params: EvoParams
     ) -> Tuple[chex.Array, EvoState]:
-        x = [
-            self.hyper_optimizer.ask().value[1]["opt_params"]
-            for _ in range(self.popsize)
-        ]
+        x = jnp.array(
+            [
+                self.hyper_optimizer.ask().value[1]["opt_params"]
+                for _ in range(self.popsize)
+            ]
+        )
         x_clipped = jnp.clip(x, params.clip_min, params.clip_max)
 
         # Reshape parameters into pytrees
@@ -143,8 +152,11 @@ class BayesOpt(object):
         )
 
         for i in range(self.popsize):
-            x_tell = {"opt_params": x[i]}
-            self.hyper_optimizer.tell(x_tell, fitness_re[i])
+            x_tell = {"opt_params": np.array(x[i])}
+            x_tell_p = self.hyper_optimizer.parametrization.spawn_child(
+                new_value=((), x_tell)
+            )
+            self.hyper_optimizer.tell(x_tell_p, float(fitness_re[i]))
         return state.replace(
             mean=best_member,
             best_member=best_member,

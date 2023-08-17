@@ -1,11 +1,11 @@
 from typing import Optional
-from evosax import Strategies, Strategy
+from evosax import Strategy
 from .policy import MNIST_Generate_Policy
 from .task import MNIST_Generate_Task
 from .evaluator import MNIST_Generate_Evaluator
-from ...blines import BayesOpt
+from ...utils import collect_strategies
 
-Strategies["BayesOpt"] = BayesOpt
+Strategies = collect_strategies()
 
 
 def mnist_generate_run(

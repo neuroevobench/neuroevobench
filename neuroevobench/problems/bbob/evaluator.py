@@ -98,9 +98,9 @@ class BBOBEvaluator(object):
         self.solution_eval = None
 
         stats_tic = {
-            "test_eval_perf": self.fitness_eval,
-            **mean_perf,
-            **best_perf,
+            "test_eval_perf": float(self.fitness_eval),
+            **{k: float(mean_perf[k]) for k in mean_perf.keys()},
+            **{k: float(best_perf[k]) for k in mean_perf.keys()},
         }
         self.update_log(time_tic, stats_tic)
 

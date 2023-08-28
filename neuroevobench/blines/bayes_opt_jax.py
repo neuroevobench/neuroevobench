@@ -1,7 +1,6 @@
 """Bayesian Optimization Wrapper to benchmark agains - not JAX compatible."""
 from typing import Any, Optional, Union, Tuple
 import chex
-import numpy as np
 import jax
 import jax.numpy as jnp
 from flax import struct

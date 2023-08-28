@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional, List
 import matplotlib.pyplot as plt
 
 
@@ -131,13 +131,19 @@ def plot_history(
     plot_xlabel: bool = True,
     plot_legend: bool = True,
     colors: list = ["r", "g", "b", "yellow", "k"],
+    plot_labels: Optional[List[str]] = None,
 ):
     """Hyperparameter sensitivity - best test scores."""
     if fig is None or ax is None:
         fig, ax = plt.subplots()
 
+    l_c = 0
     for k, v in results_dict.items():
-        ax.plot(v, label=k, c=colors[k])
+        if plot_labels is None:
+            ax.plot(v, label=k, c=colors[k])
+        else:
+            ax.plot(v, label=plot_labels[l_c], c=colors[k])
+            l_c += 1
 
     # Add vertical lines to plot after 10, 40 trials
     ax.axvline(20, ls="--", alpha=0.75, c="grey")

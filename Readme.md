@@ -1,4 +1,4 @@
-# `NeuroEvoBench`: Benchmarking Neuroevolution Methods for Machine Learning Applications 🦕 🦖 🐢
+# `NeuroEvoBench`: Benchmarking Evolutionary Optimizers for Deep Learning Applications 🦕 🦖 🐢
 <a href="https://github.com/neuroevobench/neuroevobench/blob/main/docs/logo.png"><img src="https://github.com/neuroevobench/neuroevobench/blob/main/docs/logo.png" width="200" align="right" /></a>
 This repository contains the task, experiment protocol and evolutionary optimizer (EO) wrappers for evaluating the performance of new gradient-free optimization methods (e.g. ES 🦎 or GA 🧬). It is powered by [`evosax`](https://github.com/RobertTLange/evosax/) and [`EvoJAX`](https://github.com/google/evojax) for acceleration and distributed rollouts.
 
